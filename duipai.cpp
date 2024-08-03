@@ -88,6 +88,14 @@ inline void querytest()
     }
     printf("\033[32mAccept\033[0m.\n\n");
 }
+void help(){
+    printf("\033[34mhelp (h)\033[0m -- help\n");
+    printf("\033[34mcomp (c)\033[0m -- recompile\n");
+    printf("\033[34mrun (r)\033[0m  -- start checking\n");
+    printf("\033[34mquit (q)\033[0m -- quit\n");
+    printf("\033[34mtest (t)\033[0m -- test by \033[33mdata.txt\033[0m and \033[33mans.txt\033[0m\n");
+    printf("\033[34mclear\033[0m    -- clear the screen\n");
+}
 int main()
 {
     printf("Welcome to use \033[1;31mduipai_ji\033[0m by wzh.\n\n");
@@ -101,6 +109,7 @@ int main()
         else if(ask=="c" || ask=="comp") qcomp(); 
         else if(ask=="q" || ask=="quit") queryq();
         else if(ask=="t" || ask=="test") querytest();
+        else if(ask=="h" || ask=="help") help();
         else if(ask=="clear") system("clear");
     }
     return 0;
