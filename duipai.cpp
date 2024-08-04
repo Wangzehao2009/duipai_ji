@@ -1,6 +1,18 @@
 #include <bits/stdc++.h>
 #include <sys/time.h>
 using namespace std;
+// get and split a line
+void getL(vector<string> &arg){
+    string s,t="";
+    getline(cin,s);
+    arg.clear();
+    for(int i=0;i<s.size();i++){
+        if(s[i]==' '||s[i]=='\n'||s[i]=='\r') arg.push_back(t),t="";
+        else t+=s[i];
+    }
+    arg.push_back(t);
+}
+// compare the outputs
 inline void compout()
 {
     printf("Compare the outputs? (y or n) : ");
@@ -10,6 +22,7 @@ inline void compout()
     system("killall ans make_data my");
     printf("all processes have been killed.\n\n");
 }
+// duipai
 inline void test()
 {
     system("clear");
@@ -42,33 +55,34 @@ inline void test()
     system("killall ans make_data my");
     printf("all processes have been killed.\n\n");
 }
-#define compans (system("g++ ans.cpp -w -std=c++11 -O2 -O3 -Ofast -o ans"))
-#define compmy (system("g++ my.cpp -w -std=c++11 -O2 -O3 -Ofast -o my"))
-#define compmk (system("g++ make_data.cpp -std=c++11 -w -O2 -O3 -Ofast -o make_data"))
-#define compall (compans,compmy,compmk)
-inline void qcomp()
-{
-    printf("Which documents do you want to compile? (all or make_data or ans or my) : ");
-    vector <string> s;
-    while(true)
-    {
-        string ask;
-        cin>>ask;
-        if(ask=="all") compall;
-        else if(ask=="ans") compans;
-        else if(ask=="my") compmy;
-        else if(ask=="make_data" || ask=="mk") compmk;
-        else
-        {
-            for(string i:s) cout<<"\033[1;31m"<<i<<"\033[0m ";
-            if(s.size()>1) printf("are");
-            else printf("is");
-            printf(" \033[32mcompiled\033[0m.\n\n");
-            return ;
-        }
-        s.push_back(ask);
-    }
+// compile
+vector<string> default_comp_arg={"","-w","-std=c++11","-O2","-O3","-Ofast"};
+void comp(const string &file,const vector<string> &arg){
+    string cmd="g++ "+file+".cpp -o "+file;
+    for(int i=1;i<arg.size();i++) cmd+=" "+arg[i];
+    system(cmd.c_str());
 }
+#define compall(arg) (comp("ans",arg),comp("my",arg),comp("make_data",arg))
+inline void qcomp(vector<string> &arg)
+{
+    if(arg.size()==1) arg=default_comp_arg;
+    printf("Which documents do you want to compile? (all or make_data or ans or my) : ");
+    vector <string> s,ss;
+    getL(s);
+    for(string ask:s){
+        ss.push_back(ask);
+        if(ask=="all") compall(arg);
+        else if(ask=="ans") comp("ans",arg);
+        else if(ask=="my") comp("my",arg);
+        else if(ask=="make_data" || ask=="mk") comp("make_data",arg);
+        else ss.pop_back();
+    }
+    for(string i:ss) cout<<"\033[1;31m"<<i<<"\033[0m ";
+    if(ss.size()>1) printf("are");
+    else printf("is");
+    printf(" \033[32mcompiled\033[0m.\n\n");
+}
+// quit
 inline void queryq()
 {
     printf("Do you want to quit duipai_ji? (y or n) : ");
@@ -76,6 +90,7 @@ inline void queryq()
     cin>>ask;
     if(ask=='y') exit(0);
 }
+// test
 inline void querytest()
 {
     system("./ans < data.txt > ans.txt");
@@ -88,25 +103,28 @@ inline void querytest()
     }
     printf("\033[32mAccept\033[0m.\n\n");
 }
+// help
 void help(){
-    printf("\033[34mhelp (h)\033[0m -- help\n");
     printf("\033[34mcomp (c)\033[0m -- recompile\n");
+    printf("\033[34mhelp (h)\033[0m -- help\n");
     printf("\033[34mrun (r)\033[0m  -- start checking\n");
     printf("\033[34mquit (q)\033[0m -- quit\n");
-    printf("\033[34mtest (t)\033[0m -- test by \033[33mdata.txt\033[0m and \033[33mans.txt\033[0m\n");
+    printf("\033[34mtest (t)\033[0m -- test by \033[1;31mdata.txt\033[0m and \033[1;31mans.txt\033[0m\n");
     printf("\033[34mclear\033[0m    -- clear the screen\n");
 }
+// console
 int main()
 {
     printf("Welcome to use \033[1;31mduipai_ji\033[0m by wzh.\n\n");
-    compall;
+    compall(default_comp_arg);
     while(true)
     {
         printf("\033[32m(ji) \033[0m");
-        string ask;
-        cin>>ask;
+        vector<string> cmd;
+        getL(cmd);
+        string ask=cmd[0];
         if(ask=="r" || ask=="run") test();
-        else if(ask=="c" || ask=="comp") qcomp(); 
+        else if(ask=="c" || ask=="comp") qcomp(cmd);
         else if(ask=="q" || ask=="quit") queryq();
         else if(ask=="t" || ask=="test") querytest();
         else if(ask=="h" || ask=="help") help();
