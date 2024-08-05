@@ -1,13 +1,15 @@
 #include <bits/stdc++.h>
 #include <sys/time.h>
 using namespace std;
-// get and split a line
-void getL(vector<string> &arg){
+// get arguments
+void getArg(vector<string> &arg){
     string s,t="";
     getline(cin,s);
     arg.clear();
     for(int i=0;i<s.size();i++){
-        if(s[i]==' '||s[i]=='\n'||s[i]=='\r') arg.push_back(t),t="";
+        if(s[i]==' '||s[i]=='\n'||s[i]=='\r'){
+            if(t.size()) arg.push_back(t),t="";
+        }
         else t+=s[i];
     }
     arg.push_back(t);
@@ -68,7 +70,7 @@ inline void qcomp(vector<string> &arg)
     if(arg.size()==1) arg=default_comp_arg;
     printf("Which documents do you want to compile? (all or make_data or ans or my) : ");
     vector <string> s,ss;
-    getL(s);
+    getArg(s);
     for(string ask:s){
         ss.push_back(ask);
         if(ask=="all") compall(arg);
@@ -121,7 +123,7 @@ int main()
     {
         printf("\033[32m(ji) \033[0m");
         vector<string> cmd;
-        getL(cmd);
+        getArg(cmd);
         string ask=cmd[0];
         if(ask=="r" || ask=="run") test();
         else if(ask=="c" || ask=="comp") qcomp(cmd);
