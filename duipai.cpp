@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 #include <sys/time.h>
+#define author (wzh jzq)
 using namespace std;
 // get arguments
 void getArg(vector<string> &arg){
@@ -117,7 +118,7 @@ void help(){
 // console
 int main()
 {
-    printf("Welcome to use \033[1;31mduipai_ji\033[0m by wzh.\n\n");
+    printf("Welcome to use \033[1;31mduipai_ji\033[0m by author.\n\n");
     compall(default_comp_arg);
     while(true)
     {
