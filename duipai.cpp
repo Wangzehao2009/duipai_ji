@@ -112,7 +112,7 @@ void help(){
     printf("\033[34mhelp (h)\033[0m -- help\n");
     printf("\033[34mrun (r)\033[0m  -- start checking\n");
     printf("\033[34mquit (q)\033[0m -- quit\n");
-    printf("\033[34mtest (t)\033[0m -- test by \033[1;31mdata.txt\033[0m and \033[1;31mans.txt\033[0m\n");
+    printf("\033[34mtest (t)\033[0m -- test \033[1;31mdata.txt\033[0m\n");
     printf("\033[34mclear\033[0m    -- clear the screen\n");
 }
 // console
