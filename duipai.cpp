@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #include <sys/time.h>
-#define author (wzh jzq)
 using namespace std;
+string author="wzh jzq";
 // get arguments
 void getArg(vector<string> &arg){
     string s,t="";
@@ -19,9 +19,9 @@ void getArg(vector<string> &arg){
 inline void compout()
 {
     printf("Compare the outputs? (y or n) : ");
-    char ask;
-    cin>>ask;
-    if(ask=='y') system("vimdiff ans.txt my.txt");
+    vector<string> ask;
+    getArg(ask);
+    if(ask[0]=="y") system("vimdiff ans.txt my.txt");
     system("killall ans make_data my");
     printf("all processes have been killed.\n\n");
 }
@@ -80,7 +80,7 @@ inline void qcomp(vector<string> &arg)
         else if(ask=="make_data" || ask=="mk") comp("make_data",arg);
         else ss.pop_back();
     }
-    for(string i:ss) cout<<"\033[1;31m"<<i<<"\033[0m ";
+    for(string i:ss) printf("\033[1;31m%s\033[0m ",i.c_str());
     if(ss.size()>1) printf("are");
     else printf("is");
     printf(" \033[32mcompiled\033[0m.\n\n");
@@ -89,9 +89,9 @@ inline void qcomp(vector<string> &arg)
 inline void queryq()
 {
     printf("Do you want to quit duipai_ji? (y or n) : ");
-    char ask;
-    cin>>ask;
-    if(ask=='y') exit(0);
+    vector<string> ask;
+    getArg(ask);
+    if(ask[0]=="y") exit(0);
 }
 // test
 inline void querytest()
@@ -118,7 +118,7 @@ void help(){
 // console
 int main()
 {
-    printf("Welcome to use \033[1;31mduipai_ji\033[0m by author.\n\n");
+    printf("Welcome to use \033[1;31mduipai_ji\033[0m by %s.\n\n",author.c_str());
     compall(default_comp_arg);
     while(true)
     {
