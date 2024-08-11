@@ -113,7 +113,16 @@ void help(){
     printf("\033[34mrun (r)\033[0m  -- start checking\n");
     printf("\033[34mquit (q)\033[0m -- quit\n");
     printf("\033[34mtest (t)\033[0m -- test \033[1;31mdata.txt\033[0m\n");
-    printf("\033[34mclear\033[0m    -- clear the screen\n");
+    printf("\033[34mclear\033[0m    -- clear the terminal screen\n");
+    printf("\033[34mcat\033[0m      -- concatenate and print files\n");
+}
+// cat
+void cat(const vector<string> &files){
+    for(int i=1;i<files.size();i++){
+        printf("\033[1;31m%s\033[0m\n",files[i].c_str());
+        system(("cat "+files[i]).c_str());
+        printf("\n");
+    }
 }
 // console
 int main()
@@ -132,6 +141,7 @@ int main()
         else if(ask=="t" || ask=="test") querytest();
         else if(ask=="h" || ask=="help") help();
         else if(ask=="clear") system("clear");
+        else if(ask=="cat") cat(cmd);
     }
     return 0;
 }
