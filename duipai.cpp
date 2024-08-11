@@ -59,7 +59,7 @@ inline void test()
     printf("all processes have been killed.\n\n");
 }
 // compile
-vector<string> default_comp_arg={"","-w","-std=c++11","-O2","-O3","-Ofast"};
+vector<string> default_comp_arg={"","-w","-std=c++14","-O2","-O3","-Ofast"};
 void comp(const string &file,const vector<string> &arg){
     string cmd="g++ "+file+".cpp -o "+file;
     for(int i=1;i<arg.size();i++) cmd+=" "+arg[i];
