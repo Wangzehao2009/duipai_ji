@@ -2,8 +2,13 @@
 #include <sys/time.h>
 using namespace std;
 string author="wzh jzq";
+//check find
+inline bool fd(string &x,string y)
+{
+    return x.find(y)!=string::npos;
+}
 // get arguments
-void getArg(vector<string> &arg){
+inline void getArg(vector<string> &arg){
     string s,t="";
     getline(cin,s);
     arg.clear();
@@ -22,8 +27,17 @@ inline void compout()
     vector<string> ask;
     getArg(ask);
     if(ask[0]=="y") system("vimdiff ans.txt my.txt");
-    system("killall ans make_data my");
-    printf("all processes have been killed.\n\n");
+}
+//diff
+inline void diff()
+{
+    if(system("diff -w ans.txt my.txt"))
+    {
+        printf("\033[1;31mWrong answer\033[0m.\n\n");
+        compout();
+        return ;
+    }
+    printf("\033[32mAccept\033[0m.\n\n");
 }
 // duipai
 inline void test()
@@ -55,12 +69,10 @@ inline void test()
         system("clear");
     }
     printf("\033[32mAccept\033[0m.\n\n");
-    system("killall ans make_data my");
-    printf("all processes have been killed.\n\n");
 }
 // compile
 vector<string> default_comp_arg={"","-w","-std=c++14","-O2","-O3","-Ofast"};
-void comp(const string &file,const vector<string> &arg){
+inline void comp(const string &file,const vector<string> &arg){
     string cmd="g++ "+file+".cpp -o "+file;
     for(int i=1;i<arg.size();i++) cmd+=" "+arg[i];
     system(cmd.c_str());
@@ -68,20 +80,26 @@ void comp(const string &file,const vector<string> &arg){
 #define compall(arg) (comp("ans",arg),comp("my",arg),comp("make_data",arg))
 inline void qcomp(vector<string> &arg)
 {
-    if(arg.size()==1) arg=default_comp_arg;
-    printf("Which documents do you want to compile? (all or make_data or ans or my) : ");
-    vector <string> s,ss;
-    getArg(s);
-    for(string ask:s){
-        ss.push_back(ask);
-        if(ask=="all") compall(arg);
-        else if(ask=="ans") comp("ans",arg);
-        else if(ask=="my") comp("my",arg);
-        else if(ask=="make_data" || ask=="mk") comp("make_data",arg);
-        else ss.pop_back();
+    vector <string> opt,files;
+    for(int i=1;i<arg.size();++i) 
+    {
+        if(arg[i][0]=='-') opt.push_back(arg[i]);
+        else files.push_back(arg[i]);
     }
-    for(string i:ss) printf("\033[1;31m%s\033[0m ",i.c_str());
-    if(ss.size()>1) printf("are");
+    if(opt.empty()) arg=default_comp_arg;
+    else arg=opt;
+    if(files.empty()) files.push_back("all");
+    int cnt=files.size();
+    for(string &ask:files)
+    {
+        if(ask=="all") compall(arg);
+        else if(ask=="ans" || ask=="a") comp("ans",arg);
+        else if(ask=="my" || ask=="m") comp("my",arg);
+        else if(ask=="make_data" || ask=="mk") comp("make_data",arg);
+        else ask="NULL",--cnt;
+    }
+    for(string i:files) if(i!="NULL") printf("\033[1;31m%s\033[0m ",i.c_str());
+    if(cnt>1) printf("are");
     else printf("is");
     printf(" \033[32mcompiled\033[0m.\n\n");
 }
@@ -93,21 +111,8 @@ inline void queryq()
     getArg(ask);
     if(ask[0]=="y") exit(0);
 }
-// test
-inline void querytest()
-{
-    system("./ans < data.txt > ans.txt");
-    system("./my < data.txt > my.txt");
-    if(system("diff -w ans.txt my.txt"))
-    {
-        printf("\033[1;31mWrong answer\033[0m.\n\n");
-        compout();
-        return ;
-    }
-    printf("\033[32mAccept\033[0m.\n\n");
-}
 // help
-void help(){
+inline void help(){
     printf("\033[34mcomp (c)\033[0m -- recompile\n");
     printf("\033[34mhelp (h)\033[0m -- help\n");
     printf("\033[34mrun (r)\033[0m  -- start checking\n");
@@ -117,11 +122,40 @@ void help(){
     printf("\033[34mcat\033[0m      -- concatenate and print files\n");
 }
 // cat
-void cat(const vector<string> &files){
-    for(int i=1;i<files.size();i++){
-        printf("\033[1;31m%s\033[0m\n",files[i].c_str());
-        system(("cat "+files[i]).c_str());
-        printf("\n");
+inline void catfile(string file)
+{
+    if(fd(file,"d")) file="data.txt";
+    else if(fd(file,"a")) file="ans.txt";
+    else if(fd(file,"m")) file="my.txt";
+    else return ;
+    printf("\033[1;31m%s\033[0m\n",file.c_str());
+    system(("cat "+file).c_str());
+    printf("\n");
+}
+inline void cat(vector<string> &files){
+    if(files.size()==1) files.push_back("all");
+    for(int i=1;i<files.size();i++)
+    {
+        if(files[i]=="all") catfile("data.txt"),catfile("ans.txt"),catfile("my.txt");
+        else catfile(files[i]);
+    }
+}
+// test
+inline void querytest(vector<string> &arg)
+{
+    system("./ans < data.txt > ans.txt");
+    system("./my < data.txt > my.txt");
+    for(int i=1;i<arg.size();++i)
+    {
+        if(arg[i]=="-d" || arg[i]=="-diff") diff();
+        if(arg[i]=="-c")
+        {
+            vector <string> files;
+            files.push_back("");
+            while(i+1<arg.size()) if(arg[i+1][0]!='-') files.push_back(arg[++i]);
+            if(files.empty()) files.push_back("all");
+            cat(files);
+        }
     }
 }
 // console
@@ -138,7 +172,7 @@ int main()
         if(ask=="r" || ask=="run") test();
         else if(ask=="c" || ask=="comp") qcomp(cmd);
         else if(ask=="q" || ask=="quit") queryq();
-        else if(ask=="t" || ask=="test") querytest();
+        else if(ask=="t" || ask=="test") querytest(cmd);
         else if(ask=="h" || ask=="help") help();
         else if(ask=="clear") system("clear");
         else if(ask=="cat") cat(cmd);

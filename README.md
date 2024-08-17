@@ -1,6 +1,6 @@
 # duipai_ji
 ## 版本
-v1.0
+v1.1
 ## 快速开始
 将标准程序放入 `ans.cpp` ，您的程序放入 `my.cpp` ，在 `make_data.cpp` 中编写数据生成器
 
@@ -16,3 +16,6 @@ quit (q) -- quit
 test (t) -- test by data.txt and ans.txt
 clear    -- clear the screen
 ```
+
+## 运行
+``g++ duipai.cpp -O2 -O3 -Ofast -o duipai -std=c++14 -Wall && ./duipai``
