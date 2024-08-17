@@ -152,7 +152,11 @@ inline void querytest(vector<string> &arg)
         {
             vector <string> files;
             files.push_back("");
-            while(i+1<arg.size()) if(arg[i+1][0]!='-') files.push_back(arg[++i]);
+            while(i+1<arg.size()) 
+            {
+                if(arg[i+1][0]!='-') files.push_back(arg[++i]);
+                else break;
+            }
             if(files.empty()) files.push_back("all");
             cat(files);
         }
