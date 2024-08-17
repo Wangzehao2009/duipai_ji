@@ -14,11 +14,11 @@ inline void getArg(vector<string> &arg){
     arg.clear();
     for(int i=0;i<s.size();i++){
         if(s[i]==' '||s[i]=='\n'||s[i]=='\r'){
-            if(t.size()) arg.push_back(t),t="";
+            if(!t.empty()) arg.push_back(t),t="";
         }
         else t+=s[i];
     }
-    arg.push_back(t);
+    if(!t.empty()) arg.push_back(t);
 }
 // compare the outputs
 inline void compout()
