@@ -9,6 +9,27 @@ inline bool fd(const string &x,const string &y)
 {
     return x.find(y)!=string::npos;
 }
+//aka
+inline bool match(const string&x,const string&y,const string&suf)
+{
+    return (x==y || x==y+suf);
+}
+inline vector<string> aka(const string &x,const string &suf)
+{
+    vector <string> ret;
+    if(match(x,"all",suf))
+    {
+        ret.push_back("my"+suf),ret.push_back("ans"+suf);
+        if(suf==".txt") ret.push_back("data"+suf);
+        else ret.push_back("make_data"+suf);
+    }
+    else if(match(x,"ans",suf) || match(x,"a",suf)) ret.push_back("ans"+suf);
+    else if(match(x,"make_data",suf) || match(x,"mk",suf)) ret.push_back("make_data"+suf);
+    else if(match(x,"data",suf) || match(x,"d",suf)) ret.push_back("data"+suf);
+    else if(match(x,"my",suf) || match(x,"m",suf)) ret.push_back("my"+suf);
+    else ret.push_back("NULL");
+    return ret;
+}
 //readline
 inline void getLine(const string &prompt,string &s){
     char* buffer=readline(prompt.c_str());
@@ -82,6 +103,7 @@ inline void test()
 // compile
 vector<string> default_comp_arg={"","-w","-std=c++14","-O2","-O3","-Ofast"};
 inline void comp(const string &file,const vector<string> &arg){
+    if(file=="NULL") return ;
     string cmd="g++ "+file+".cpp -o "+file;
     for(int i=1;i<arg.size();i++) cmd+=" "+arg[i];
     system(cmd.c_str());
@@ -89,6 +111,7 @@ inline void comp(const string &file,const vector<string> &arg){
 #define compall(arg) (comp("ans",arg),comp("my",arg),comp("make_data",arg))
 inline void qcomp(vector<string> &arg)
 {
+    int cnt=0;
     vector <string> opt,files;
     for(int i=1;i<arg.size();++i) 
     {
@@ -98,19 +121,25 @@ inline void qcomp(vector<string> &arg)
     if(opt.empty()) arg=default_comp_arg;
     else arg=opt;
     if(files.empty()) files.push_back("all");
-    int cnt=files.size();
     for(string &ask:files)
     {
-        if(ask=="all") compall(arg);
-        else if(ask=="ans" || ask=="a") comp("ans",arg);
-        else if(ask=="my" || ask=="m") comp("my",arg);
-        else if(ask=="make_data" || ask=="mk") comp("make_data",arg);
-        else ask="NULL",--cnt;
+        vector <string> file=aka(ask,"");
+        for(string &comp_file:file) 
+        {
+            if(comp_file=="NULL") continue;
+            printf("\033[1;31m%s\033[0m ",comp_file.c_str());
+            ++cnt;
+            comp(comp_file,arg);
+        }
     }
-    for(string i:files) if(i!="NULL") printf("\033[1;31m%s\033[0m ",i.c_str());
+    if(!cnt)
+    {
+        printf("\033[1;31merror: \033[0minvalid compile file\n");
+        return ;   
+    }
     if(cnt>1) printf("are");
     else printf("is");
-    printf(" \033[32mcompiled\033[0m.\n\n");
+    printf(" \033[32mcompiled\033[0m.\n");
 }
 // quit
 inline void queryq()
@@ -132,20 +161,16 @@ inline void help(){
 // cat
 inline void catfile(string file)
 {
-    if(fd(file,"d")) file="data.txt";
-    else if(fd(file,"a")) file="ans.txt";
-    else if(fd(file,"m")) file="my.txt";
-    else return ;
     printf("\033[1;31m%s\033[0m\n",file.c_str());
     system(("cat "+file).c_str());
-    printf("\n");
+    printf("\n\n");
 }
 inline void cat(vector<string> &files){
     if(files.size()==1) files.push_back("all");
     for(int i=1;i<files.size();i++)
     {
-        if(files[i]=="all") catfile("data.txt"),catfile("ans.txt"),catfile("my.txt");
-        else catfile(files[i]);
+        vector <string> file=aka(files[i],".txt");
+        for(string &cat_file:file) if(cat_file!="NULL") catfile(cat_file);
     }
 }
 // test
