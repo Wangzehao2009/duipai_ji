@@ -18,4 +18,4 @@ clear    -- clear the screen
 ```
 
 ## 运行
-``g++ duipai.cpp -O2 -O3 -Ofast -o duipai -std=c++14 -Wall && ./duipai``
+``g++ duipai.cpp -O2 -O3 -Ofast -o duipai -std=c++14 -Wall -lreadline -ltermcap && ./duipai``
