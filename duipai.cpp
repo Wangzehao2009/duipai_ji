@@ -1,16 +1,26 @@
 #include <bits/stdc++.h>
 #include <sys/time.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 using namespace std;
 string author="wzh jzq";
 //check find
-inline bool fd(string &x,string y)
+inline bool fd(const string &x,const string &y)
 {
     return x.find(y)!=string::npos;
 }
+//readline
+inline void getLine(const string &prompt,string &s){
+    char* buffer=readline(prompt.c_str());
+    if(buffer&&*buffer) add_history(buffer);
+    s=buffer;
+    free(buffer);
+}
 // get arguments
-inline void getArg(vector<string> &arg){
+inline void getArg(const string &prompt,vector<string> &arg){
     string s,t="";
-    getline(cin,s);
+    getLine(prompt,s);
+    // getline(cin,s);
     arg.clear();
     for(int i=0;i<s.size();i++){
         if(s[i]==' '||s[i]=='\n'||s[i]=='\r'){
@@ -23,9 +33,8 @@ inline void getArg(vector<string> &arg){
 // compare the outputs
 inline void compout()
 {
-    printf("Compare the outputs? (y or n) : ");
     vector<string> ask;
-    getArg(ask);
+    getArg("Compare the outputs? (y or n) : ",ask);
     if(ask[0]=="y") system("vimdiff ans.txt my.txt");
 }
 //diff
@@ -106,9 +115,8 @@ inline void qcomp(vector<string> &arg)
 // quit
 inline void queryq()
 {
-    printf("Do you want to quit duipai_ji? (y or n) : ");
     vector<string> ask;
-    getArg(ask);
+    getArg("Do you want to quit duipai_ji? (y or n) : ",ask);
     if(ask[0]=="y") exit(0);
 }
 // help
@@ -169,9 +177,10 @@ int main()
     compall(default_comp_arg);
     while(true)
     {
-        printf("\033[32m(ji) \033[0m");
         vector<string> cmd;
-        getArg(cmd);
+        printf("\e[32m(ji)$ \e[0m");
+        getArg("\033[D\033[C",cmd);
+        if(cmd.empty()) continue;
         string ask=cmd[0];
         if(ask=="r" || ask=="run") test();
         else if(ask=="c" || ask=="comp") qcomp(cmd);
