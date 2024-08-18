@@ -17,5 +17,5 @@ test (t) -- test by data.txt and ans.txt
 clear    -- clear the screen
 ```
 
-## 运行
+## 编译参数·
 ``g++ duipai.cpp -O2 -O3 -Ofast -o duipai -std=c++14 -Wall -lreadline -ltermcap && ./duipai``
