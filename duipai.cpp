@@ -14,9 +14,8 @@ inline bool match(const string&x,const string&y,const string&suf)
 {
     return (x==y || x==y+suf);
 }
-inline vector<string> aka(const string &x,const string &suf)
+inline void aka(vector <string> &ret,const string &x,const string &suf)
 {
-    vector <string> ret;
     if(match(x,"all",suf))
     {
         ret.push_back("my"+suf),ret.push_back("ans"+suf);
@@ -28,7 +27,6 @@ inline vector<string> aka(const string &x,const string &suf)
     else if(match(x,"data",suf) || match(x,"d",suf)) ret.push_back("data"+suf);
     else if(match(x,"my",suf) || match(x,"m",suf)) ret.push_back("my"+suf);
     else ret.push_back("NULL");
-    return ret;
 }
 //readline
 inline void getLine(const string &prompt,string &s){
@@ -123,7 +121,8 @@ inline void qcomp(vector<string> &arg)
     if(files.empty()) files.push_back("all");
     for(string &ask:files)
     {
-        vector <string> file=aka(ask,"");
+        vector <string> file;
+        aka(file,ask,"");
         for(string &comp_file:file) 
         {
             if(comp_file=="NULL") continue;
@@ -169,7 +168,8 @@ inline void cat(vector<string> &files){
     if(files.size()==1) files.push_back("all");
     for(int i=1;i<files.size();i++)
     {
-        vector <string> file=aka(files[i],".txt");
+        vector <string> file;
+        aka(file,files[i],".txt");
         for(string &cat_file:file) if(cat_file!="NULL") catfile(cat_file);
     }
 }
