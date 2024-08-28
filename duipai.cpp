@@ -195,6 +195,11 @@ inline void querytest(vector<string> &arg)
         }
     }
 }
+//clean
+inline void clean()
+{
+    system("ls | grep -Ev 'duipai|ans|my|make_data|README.md' | xargs rm -r");
+}
 // console
 int main()
 {
@@ -214,6 +219,7 @@ int main()
         else if(ask=="h" || ask=="help") help();
         else if(ask=="clear") system("clear");
         else if(ask=="cat") cat(cmd);
+        else if(ask=="clean") clean();
     }
     return 0;
 }
