@@ -198,7 +198,7 @@ inline void querytest(vector<string> &arg)
 //clean
 inline void clean()
 {
-    system("ls | grep -Ev 'duipai|ans|my|make_data|README.md' | xargs rm -r");
+    system("ls | grep -Ev 'duipai|ans|my|make_data|README.md|install.sh' | xargs rm -r");
 }
 // console
 int main()
