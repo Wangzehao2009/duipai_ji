@@ -148,14 +148,29 @@ inline void queryq()
     if(ask[0]=="y") exit(0);
 }
 // help
-inline void help(){
-    printf("\033[34mcomp (c)\033[0m -- recompile\n");
+inline void help()
+{
+    putchar('\n');
     printf("\033[34mhelp (h)\033[0m -- help\n");
-    printf("\033[34mrun (r)\033[0m  -- start checking\n");
+    putchar('\n');
+    printf("\033[34mcomp (c) [ file ... ]\033[0m -- compile\n");
+    printf("\033[34m    [ compile_option ... ]\033[0m - customize compile\n");
+    putchar('\n');
+    printf("\033[34mcat [ file ... ]\033[0m  -- concatenate and print files\n");
+    putchar('\n');
+    printf("\033[34mtest (t) [ file ...]\033[0m -- test current data\n");
+    printf("\033[34m    [ -d ]\033[0m - check differences\n");
+    printf("\033[34m    [ -c ]\033[0m - cat\n");
+    putchar('\n');
+    printf("\033[34mclean\033[0m -- delete all files in the folder except system files\n");
+    putchar('\n');
+    printf("\033[34mrun (r)\033[0m -- start duipaiing\n");
+    printf("\033[34m    [ -c ] [ thread_count ]\033[0m - duipaiing by using [ thread_count ] threads\n");
+    putchar('\n');
+    printf("\033[34mclear\033[0m -- clear the screen\n");
+    putchar('\n');
     printf("\033[34mquit (q)\033[0m -- quit\n");
-    printf("\033[34mtest (t)\033[0m -- test \033[1;31mdata.txt\033[0m\n");
-    printf("\033[34mclear\033[0m    -- clear the terminal screen\n");
-    printf("\033[34mcat\033[0m      -- concatenate and print files\n");
+    putchar('\n');
 }
 // cat
 inline void catfile(string file)

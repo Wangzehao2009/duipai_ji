@@ -19,16 +19,23 @@
 ## 操作指南
 ```
 help (h) -- help
+
 comp (c) [ file ... ] -- compile
     [ compile_option ... ] - customize compile
+
 cat [ file ... ] -- concatenate and print files
+
 test (t) [ file ...] -- test current data
-    [-d] check differences
-    [-c] cat
+    [ -d ] - check differences
+    [ -c ] - cat
+
 clean -- delete all files in the folder except system files
+
 run (r)  -- start duipaiing
-    [-c] [ thread_count ] duipaiing by using [ thread_count ] threads
+    [ -c ] [ thread_count ] - duipaiing by using [ thread_count ] threads
+
 clear -- clear the screen
+
 quit (q) -- quit
 ```
 
