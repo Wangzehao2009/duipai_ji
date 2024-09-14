@@ -2,60 +2,10 @@
 #include <sys/time.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include "run.hpp"
+#include "base.hpp"
 using namespace std;
 string author="wzh jzq";
-//check find
-inline bool fd(const string &x,const string &y)
-{
-    return x.find(y)!=string::npos;
-}
-//aka
-inline bool match(const string&x,const string&y,const string&suf)
-{
-    return (x==y || x==y+suf);
-}
-inline void aka(vector <string> &ret,const string &x,const string &suf)
-{
-    if(match(x,"all",suf))
-    {
-        ret.push_back("my"+suf),ret.push_back("ans"+suf);
-        if(suf==".txt") ret.push_back("data"+suf);
-        else ret.push_back("make_data"+suf);
-    }
-    else if(match(x,"ans",suf) || match(x,"a",suf)) ret.push_back("ans"+suf);
-    else if(match(x,"make_data",suf) || match(x,"mk",suf)) ret.push_back("make_data"+suf);
-    else if(match(x,"data",suf) || match(x,"d",suf)) ret.push_back("data"+suf);
-    else if(match(x,"my",suf) || match(x,"m",suf)) ret.push_back("my"+suf);
-    else ret.push_back("NULL");
-}
-//readline
-inline void getLine(const string &prompt,string &s){
-    char* buffer=readline(prompt.c_str());
-    if(buffer&&*buffer) add_history(buffer);
-    s=buffer;
-    free(buffer);
-}
-// get arguments
-inline void getArg(const string &prompt,vector<string> &arg){
-    string s,t="";
-    getLine(prompt,s);
-    // getline(cin,s);
-    arg.clear();
-    for(int i=0;i<s.size();i++){
-        if(s[i]==' '||s[i]=='\n'||s[i]=='\r'){
-            if(!t.empty()) arg.push_back(t),t="";
-        }
-        else t+=s[i];
-    }
-    if(!t.empty()) arg.push_back(t);
-}
-// compare the outputs
-inline void compout()
-{
-    vector<string> ask;
-    getArg("Compare the outputs? (y or n) : ",ask);
-    if(ask[0]=="y") system("vimdiff ans.txt my.txt");
-}
 //diff
 inline void diff()
 {
@@ -64,37 +14,6 @@ inline void diff()
         printf("\033[1;31mWrong answer\033[0m.\n\n");
         compout();
         return ;
-    }
-    printf("\033[32mAccept\033[0m.\n\n");
-}
-// duipai
-inline void test()
-{
-    system("clear");
-    long long cnt=0;
-    struct timeval tv;
-    gettimeofday(&tv,NULL);
-    unsigned long long noww,now;
-    noww=now=tv.tv_sec*1000+tv.tv_usec/1000;
-    while(cnt<=500 && (noww-now)*1.0/1000<=45)
-    {
-        ++cnt;
-        printf("\033[1;32mRunning\033[0m on test \033[34m%lld\033[0m.\n\n",cnt);
-        struct timeval tv1;
-        gettimeofday(&tv1,NULL);
-        noww=tv1.tv_sec*1000+tv1.tv_usec/1000;
-        printf("\033[34m%.3lfs\033[0m have been used.\n\n",(noww-now)*1.0/1000);
-        system("./make_data > data.txt");
-        system("./ans < data.txt > ans.txt");
-        system("./my < data.txt > my.txt");
-        if(system("diff -w ans.txt my.txt"))
-        {
-            system("clear");
-            printf("\033[1;31mWrong answer\033[0m on test \033[34m%lld\033[0m.\n\n",cnt);
-            compout();
-            return ;
-        }
-        system("clear");
     }
     printf("\033[32mAccept\033[0m.\n\n");
 }
@@ -213,21 +132,56 @@ inline void querytest(vector<string> &arg)
 //clean
 inline void clean()
 {
-    system("ls | grep -Ev 'duipai|ans|my|make_data|README.md|install.sh' | xargs rm -r");
+    system("ls | grep -Ev 'duipai|ans|my|make_data|README.md|install.sh|base.hpp|run.hpp' | xargs rm -r");
+}
+// init
+vector<string> commands={"comp","help","run","quit","test","clear","cat","clean"};
+vector<string> files={"ans","data","my","all"};
+vector<string> current_map;
+char *command_generator(const char *text,int state){
+    static int list_index,len;
+    string name;
+    if(!state) {
+        list_index=0;
+        len=strlen(text);
+    }
+    while(list_index<current_map.size()){
+        name=current_map[list_index++];
+        if (strncmp(name.c_str(), text, len) == 0){
+            char *t;
+            t=(char*)malloc(name.size()+1);
+            strcpy(t,name.c_str());
+            return t;
+        }
+    }
+    return (char *)NULL;
+}
+char **autoComplete(const char *text,int start,int end){
+    char **matches;
+    matches=(char**)NULL;
+    if(start==0) current_map=commands;
+    else current_map=files;
+    matches=rl_completion_matches(text,command_generator);
+    return matches;
+}
+void init(){
+    rl_attempted_completion_function=autoComplete;
 }
 // console
 int main()
 {
+    init();
     printf("Welcome to use \033[1;31mduipai_ji\033[0m by %s.\n\n",author.c_str());
     compall(default_comp_arg);
     while(true)
     {
         vector<string> cmd;
-        printf("\e[32m(ji)$ \e[0m");
-        getArg("\033[D\033[C",cmd);
+        // printf("\e[32m(ji)$ \e[0m");
+        // getArg("\033[D\033[C",cmd);
+        getArg("\001\033[32m\002(ji)$ \001\033[0m\002",cmd);
         if(cmd.empty()) continue;
         string ask=cmd[0];
-        if(ask=="r" || ask=="run") test();
+        if(ask=="r" || ask=="run") test(cmd);
         else if(ask=="c" || ask=="comp") qcomp(cmd);
         else if(ask=="q" || ask=="quit") queryq();
         else if(ask=="t" || ask=="test") querytest(cmd);
