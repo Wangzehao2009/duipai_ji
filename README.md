@@ -5,13 +5,17 @@
 ``wzh`` ``jzq``
 
 ## 版本
-``v1.2_Mac``
+``v1.2_Ubuntu``
 
 ## 初始化
-在 ``duipai_ji`` 文件下的终端输入 ``bash install.sh`` 命令安装对拍脚本。
+在 ``duipai_ji`` 文件下的终端输入 ``./install.sh`` 命令安装对拍脚本。
 
 默认编译参数: 
-``g++ duipai.cpp -O2 -O3 -Ofast -o duipai -std=c++17 -Wall -lreadline -ltermcap && ./duipai``
+
+``
+g++ src/duipai.cpp -I ./library/libs/include -L ./library/libs/lib -L ./library/ncurses/usr/lib/x86_64-linux-gnu -lreadline -std=c++17 -lncurses -pthread -o duipai
+``
+
 
 将标准程序写入 `ans.cpp` ，需要对拍的程序写入 `my.cpp` ，在 `make_data.cpp` 中写入数据生成代码。
 
@@ -53,4 +57,8 @@ my
 data.txt (data) (d)
 make_data.cpp + ans.cpp + my.cpp (all)
 data.txt + ans.txt + my.txt (all)
+spj.cpp (spj) (s)
+spj
+library
+src
 ```
