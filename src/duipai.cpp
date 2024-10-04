@@ -133,7 +133,7 @@ inline void querytest(vector<string> &arg)
 //clean
 inline void clean()
 {
-    system("ls | grep -Ev 'duipai|ans|my|make_data|README.md|install.sh|base.hpp|run.hpp|data' | xargs rm -r");
+    system("ls | grep -Ev 'duipai|ans.cpp|my.cpp|make_data.cpp|README.md|install.sh|src|library|spj.cpp' | xargs rm -r");
 }
 // console
 int main()
@@ -157,6 +157,7 @@ int main()
         else if(ask=="clear") system("clear");
         else if(ask=="cat") cat(cmd);
         else if(ask=="clean") clean();
+        else help();
     }
     return 0;
 }

@@ -10,6 +10,7 @@
 using namespace std;
 bool acc[1000005];
 int threadCnt,killed,testCaseId[1000005];
+bool spj=0;
 double timeUsed[1000005];
 mutex killedMtx;
 thread t[1000005];
@@ -40,7 +41,10 @@ inline void threadFunction(int &cnt,int id,bool &accepted,double &tm)
         system(("./make_data > data"+to_string(id)+".txt").c_str());
         system(("./ans < data"+to_string(id)+".txt > ans"+to_string(id)+".txt").c_str());
         system(("./my < data"+to_string(id)+".txt > my"+to_string(id)+".txt").c_str());
-        if(system(("diff -w ans"+to_string(id)+".txt my"+to_string(id)+".txt").c_str()))
+        string diff;
+        if(!spj) diff="diff -w ans"+to_string(id)+".txt my"+to_string(id)+".txt";
+        else diff="./spj <my"+to_string(id)+".txt";
+        if(system(diff.c_str()))
         {
             killedMtx.lock();
             accepted=1;
@@ -57,11 +61,16 @@ inline void threadFunction(int &cnt,int id,bool &accepted,double &tm)
     accepted=1;
     return ;
 }
+inline void comp(const string &file,const vector<string> &arg);
 inline void test(vector<string> &arg){
-    threadCnt=1;
+    threadCnt=1,spj=0;
     for(int i=1;i<arg.size();i++){
-        if(arg[i]=="-c"||arg[i]=="--cores") threadCnt=stoi(arg[i+1]);
+        if(arg[i]=="-c" || arg[i]=="--cores") threadCnt=stoi(arg[i+1]);
+        else if(arg[i]=="-s" || arg[i]=="--spj") spj=1;
     }
+    vector <string> tmp;
+    tmp.push_back("-I library");
+    if(spj) comp("spj",tmp);
     killed=0;
     killedMtx.unlock();
     t0=t1=gettime();
