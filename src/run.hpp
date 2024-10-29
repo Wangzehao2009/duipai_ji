@@ -10,7 +10,9 @@
 using namespace std;
 bool acc[1000005];
 int threadCnt,killed,testCaseId[1000005];
-bool spj=0;
+bool spj=0,limitt=0,limitc=0;
+int Caselimit=500;
+double Timelimit=45;
 double timeUsed[1000005];
 mutex killedMtx;
 thread t[1000005];
@@ -21,19 +23,23 @@ unsigned long long gettime(){
     unsigned long long noww,now;
     return tv.tv_sec*1000+tv.tv_usec/1000;
 }
-void printStat(){
+void printStat()
+{
     system("clear");
-    for(int i=1;i<=threadCnt;i++){
-        if(!acc[i]) printf("thread #%d : \033[1;32mRunning\033[0m on test \033[34m%d\033[0m. \033[34m%.3lfs\033[0m have been used.\n\n",i,testCaseId[i],timeUsed[i]);
-        else printf("thread #%d : \033[32mAccept\033[0m.\n\n",i);
+    int tot=0;
+    for(int i=1;i<=threadCnt;i++)
+    {
+        if(!acc[i]) printf("\033[1mthread #%d\033[0m\n\033[1;32mRunning\033[0m on case \033[34m%d\033[0m.\n\033[34m%.3lfs\033[0m have been used.\n\n",i,testCaseId[i],timeUsed[i]),tot+=testCaseId[i];
+        else printf("\033[1mthread #%d\033[0m\n\033[32mAccept\033[0m.\n\n",i);
     }
-    printf("total time : \033[34m%.3lfs\033[0m\n\n",(gettime()-t0)*1.0/1000);
+    printf("\033[1mtotal time:\033[0m \033[34m%.3lfs\033[0m\n",(gettime()-t0)*1.0/1000);
+    printf("\033[1mtotal case:\033[0m \033[34m%d\033[0m\n\n",tot);
 }
 inline void threadFunction(int &cnt,int id,bool &accepted,double &tm)
 {
     unsigned long long noww,now;
     noww=now=gettime();
-    while(cnt<=500 && (noww-now)*1.0/1000<=45 && !killed)
+    while(((!(limitc^limitt) && cnt<=Caselimit && (noww-now)*1.0/1000<=Timelimit) || (limitc && cnt<=Caselimit) || (limitt && (noww-now)*1.0/1000<=Timelimit)) && !killed)
     {
         ++cnt;
         noww=gettime();
@@ -62,42 +68,45 @@ inline void threadFunction(int &cnt,int id,bool &accepted,double &tm)
     return ;
 }
 inline void comp(const string &file,const vector<string> &arg);
-inline void test(vector<string> &arg){
-    threadCnt=1,spj=0;
-    for(int i=1;i<arg.size();i++){
+inline void test(vector<string> &arg)
+{
+    threadCnt=1,spj=0,limitt=limitc=0,Caselimit=500,Timelimit=45;
+    for(int i=1;i<arg.size();i++)
+    {
         if(arg[i]=="-c" || arg[i]=="--cores") threadCnt=stoi(arg[i+1]);
         else if(arg[i]=="-s" || arg[i]=="--spj") spj=1;
+        else if(arg[i]=="-T" || arg[i]=="--Timelimit") limitt=1,Timelimit=stod(arg[i+1]);
+        else if(arg[i]=="-C" || arg[i]=="--Caselimit") limitc=1,Caselimit=stoi(arg[i+1]);
     }
-    vector <string> tmp;
-    tmp.push_back("-I library");
-    if(spj) comp("spj",tmp);
     killed=0;
     killedMtx.unlock();
     t0=t1=gettime();
-    for(int i=1;i<=threadCnt;i++){
+    for(int i=1;i<=threadCnt;i++)
+    {
         testCaseId[i]=1;
         acc[i]=0;
         timeUsed[i]=0;
         t[i]=thread(threadFunction,ref(testCaseId[i]),i,ref(acc[i]),ref(timeUsed[i]));
     }
-    while(!killed){
+    while(!killed)
+    {
         bool flag=true;
         for(int i=1;i<=threadCnt;i++) flag&=acc[i];
         if(flag) break;
     }
     for(int i=1;i<=threadCnt;i++) t[i].join();
     system("clear");
-    if(killed){
+    if(killed)
+    {
         printf("thread #%d : \033[1;31mWrong answer\033[0m on test \033[34m%d\033[0m.\n\n",killed,testCaseId[killed]);
         system(("cp ans"+to_string(killed)+".txt ans.txt").c_str());
         system(("cp data"+to_string(killed)+".txt data.txt").c_str());
         system(("cp my"+to_string(killed)+".txt my.txt").c_str());
         compout();
     }
-    else{
-        printf("\033[32mAccept\033[0m.\n\n");
-    }
-    for(int i=1;i<=threadCnt;i++){
+    else printf("\033[32mAccept\033[0m.\n\n");
+    for(int i=1;i<=threadCnt;i++)
+    {
         system(("rm ans"+to_string(i)+".txt").c_str());
         system(("rm data"+to_string(i)+".txt").c_str());
         system(("rm my"+to_string(i)+".txt").c_str());
