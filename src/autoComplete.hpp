@@ -4,7 +4,8 @@
 vector<string> commands={"comp","help","run","quit","test","clear","cat","clean"};
 vector<string> files={"ans","data","my","all"};
 vector<string> current_map;
-char *command_generator(const char *text,int state){
+char *command_generator(const char *text,int state)
+{
     static int list_index,len;
     string name;
     if(!state) {
@@ -22,7 +23,8 @@ char *command_generator(const char *text,int state){
     }
     return (char *)NULL;
 }
-char **autoComplete(const char *text,int start,int end){
+char **autoComplete(const char *text,int start,int end)
+{
     char **matches;
     matches=(char**)NULL;
     if(start==0) current_map=commands;

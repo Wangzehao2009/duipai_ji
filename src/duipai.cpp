@@ -20,13 +20,14 @@ inline void diff()
 }
 // compile
 vector<string> default_comp_arg={"","-w","-std=c++14","-O2","-O3","-Ofast"};
-inline void comp(const string &file,const vector<string> &arg){
+inline void comp(const string &file,const vector<string> &arg)
+{
     if(file=="NULL") return ;
     string cmd="g++ "+file+".cpp -o "+file;
     for(int i=1;i<arg.size();i++) cmd+=" "+arg[i];
     system(cmd.c_str());
 }
-#define compall(arg) (comp("ans",arg),comp("my",arg),comp("make_data",arg))
+#define compall(arg) (comp("ans",arg),comp("my",arg),comp("make_data",arg),comp("spj",arg))
 inline void qcomp(vector<string> &arg)
 {
     int cnt=0;
@@ -70,27 +71,31 @@ inline void queryq()
 // help
 inline void help()
 {
-    putchar('\n');
-    printf("\033[34mhelp (h)\033[0m -- help\n");
-    putchar('\n');
-    printf("\033[34mcomp (c) [ file ... ]\033[0m -- compile\n");
-    printf("\033[34m    [ compile_option ... ]\033[0m - customize compile\n");
-    putchar('\n');
-    printf("\033[34mcat [ file ... ]\033[0m  -- concatenate and print files\n");
-    putchar('\n');
-    printf("\033[34mtest (t) [ file ...]\033[0m -- test current data\n");
-    printf("\033[34m    [ -d ]\033[0m - check differences\n");
-    printf("\033[34m    [ -c ]\033[0m - cat\n");
-    putchar('\n');
-    printf("\033[34mclean\033[0m -- delete all files in the folder except system files\n");
-    putchar('\n');
-    printf("\033[34mrun (r)\033[0m -- start duipaiing\n");
-    printf("\033[34m    [ -c ] [ thread_count ]\033[0m - duipaiing by using [ thread_count ] threads\n");
-    putchar('\n');
-    printf("\033[34mclear\033[0m -- clear the screen\n");
-    putchar('\n');
-    printf("\033[34mquit (q)\033[0m -- quit\n");
-    putchar('\n');
+    printf("help (h) -- help\n");
+    printf("\n");
+    printf("init [ file ... ] -- initialize files\n");
+    printf("\n");
+    printf("comp (c) [ file ... ] -- compile\n");
+    printf("    [ compile_option ... ] - customize compile\n");
+    printf("\n");
+    printf("cat [ file ... ] -- concatenate and print files\n");
+    printf("\n");
+    printf("test (t) [ file ... ] -- test current data\n");
+    printf("    [ --diff | -d ] - check differences\n");
+    printf("    [ --cat | -c ] - cat\n");
+    printf("    [ --spj | -s ] - compare by special judge\n");
+    printf("\n");
+    printf("clean -- delete all files in the folder except system files\n");
+    printf("\n");
+    printf("run (r)  -- start duipaiing\n");
+    printf("    [ --cores | -c ] [ thread_count ] - run by using [ thread_count ] threads\n");
+    printf("    [ --spj | -s ] - compare by special judge\n");
+    printf("    [ --Timelimit | -T ] [ time ] - set [ time ] as running time limit\n");
+    printf("    [ --Caselimit | -C ] [ case ] - set [ case ] as running case limit\n");
+    printf("\n");
+    printf("clear -- clear the screen\n");
+    printf("\n");
+    printf("quit (q) -- quit\n");
 }
 // cat
 inline void catfile(string file)
@@ -115,8 +120,8 @@ inline void querytest(vector<string> &arg)
     system("./my < data.txt > my.txt");
     for(int i=1;i<arg.size();++i)
     {
-        if(arg[i]=="-d" || arg[i]=="-diff") diff();
-        if(arg[i]=="-c")
+        if(arg[i]=="-d" || arg[i]=="--diff") diff();
+        if(arg[i]=="-c" || arg[i]=="--cat")
         {
             vector <string> files;
             files.push_back("");
@@ -128,12 +133,37 @@ inline void querytest(vector<string> &arg)
             if(files.empty()) files.push_back("all");
             cat(files);
         }
+        if(arg[i]=="-s" || arg[i]=="--spj") system("./spj data.txt my.txt ans.txt");
     }
 }
 //clean
 inline void clean()
 {
+    vector <string> q;
+    getArg("Confirm to clean? (y or n) : ",q);
+    if(q[0]=="n") return ;
     system("ls | grep -Ev 'duipai|ans.cpp|my.cpp|make_data.cpp|README.md|install.sh|src|library|spj.cpp' | xargs rm -r");
+}
+//initialize
+inline void Init(vector <string> &arg)
+{
+    arg.erase(arg.begin());
+    vector <string> q;
+    getArg("Confirm to initialize? (y or n) : ",q);
+    if(q[0]=="n") return ;
+    vector <string> init;
+    if(arg.empty()) arg.push_back("all");
+    for(string file:arg) aka(init,file,"");
+    int cnt=0;
+    for(string file:init) if(file!="NULL") cnt++,system(("cp src/"+file+"_init.cpp "+file+".cpp").c_str()),printf("\033[1;31m%s\033[0m ",file.c_str());;
+    if(!cnt)
+    {
+        printf("\033[1;31merror: \033[0minvalid initialization file\n");
+        return ;   
+    }
+    if(cnt>1) printf("are");
+    else printf("is");
+    printf(" \033[32minitialized\033[0m.\n");
 }
 // console
 int main()
@@ -157,6 +187,7 @@ int main()
         else if(ask=="clear") system("clear");
         else if(ask=="cat") cat(cmd);
         else if(ask=="clean") clean();
+        else if(ask=="init") Init(cmd);
         else help();
     }
     return 0;
