@@ -24,19 +24,25 @@ g++ src/duipai.cpp -I ./library/libs/include -L ./library/libs/lib -L ./library/
 ```
 help (h) -- help
 
+init [ file ... ] -- initialize files
+
 comp (c) [ file ... ] -- compile
     [ compile_option ... ] - customize compile
 
 cat [ file ... ] -- concatenate and print files
 
-test (t) [ file ...] -- test current data
-    [ -d ] - check differences
-    [ -c ] - cat
+test (t) [ file ... ] -- test current data
+    [ --diff | -d ] - check differences
+    [ --cat | -c ] - cat
+    [ --spj | -s ] - compare by special judge
 
 clean -- delete all files in the folder except system files
 
 run (r)  -- start duipaiing
-    [ -c ] [ thread_count ] - duipaiing by using [ thread_count ] threads
+    [ --cores | -c ] [ thread_count ] - run by using [ thread_count ] threads
+    [ --spj | -s ] - compare by special judge
+    [ --Timelimit | -T ] [ time ] - set [ time ] as running time limit
+    [ --Caselimit | -C ] [ case ] - set [ case ] as running case limit
 
 clear -- clear the screen
 
@@ -47,18 +53,14 @@ quit (q) -- quit
 ```
 install.sh
 make_data.cpp (mk)
-make_data
+data.txt (data) (d)
 ans.cpp (ans) (a)
 ans.txt (ans) (a)
-ans
 my.cpp (my) (m)
 my.txt (my) (m)
-my
-data.txt (data) (d)
-make_data.cpp + ans.cpp + my.cpp (all)
-data.txt + ans.txt + my.txt (all)
 spj.cpp (spj) (s)
-spj
-library
+make_data.cpp + ans.cpp + my.cpp +spj.cpp (all)
+data.txt + ans.txt + my.txt (all)
 src
+library
 ```
