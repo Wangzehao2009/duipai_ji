@@ -1,5 +1,5 @@
 # duipai_ji
-> 抵抗 ``XC-duipai`` 的强大工具，你值得拥有
+> 抵抗 [``XC-duipai``](https://github.com/wchengk09/XC-duipai) 的强大工具，你值得拥有
 
 ## 作者
 ``wzh`` ``jzq``
