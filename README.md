@@ -1,11 +1,11 @@
 # duipai_ji
-> 抵抗 ``m_duipai`` 的强大工具，你值得拥有
+> 替代 [``XC-duipai``](https://github.com/wchengk09/XC-duipai) 的强大工具，你值得拥有
 
 ## 作者
 ``wzh`` ``jzq``
 
 ## 版本
-``v1.2_Mac``
+``v1.21_Mac``
 
 ## 初始化
 在 ``duipai_ji`` 文件下的终端输入 ``./install.sh`` 命令安装对拍脚本。
