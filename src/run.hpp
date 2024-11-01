@@ -37,6 +37,9 @@ void printStat()
 }
 inline void threadFunction(int &cnt,int id,bool &accepted,double &tm)
 {
+    string data="data"+to_string(id)+".txt",my="my"+to_string(id)+".txt",ans="ans"+to_string(id)+".txt",diff;
+    if(!spj) diff="diff -w "+ans+" "+my;
+    else diff="./spj "+data+" "+my+" "+ans;
     unsigned long long noww,now;
     noww=now=gettime();
     while(((!(limitc^limitt) && cnt<=Caselimit && (noww-now)*1.0/1000<=Timelimit) || (limitc && cnt<=Caselimit) || (limitt && (noww-now)*1.0/1000<=Timelimit)) && !killed)
@@ -44,12 +47,9 @@ inline void threadFunction(int &cnt,int id,bool &accepted,double &tm)
         ++cnt;
         noww=gettime();
         tm=(noww-now)*1.0/1000;
-        system(("./make_data > data"+to_string(id)+".txt").c_str());
-        system(("./ans < data"+to_string(id)+".txt > ans"+to_string(id)+".txt").c_str());
-        system(("./my < data"+to_string(id)+".txt > my"+to_string(id)+".txt").c_str());
-        string diff;
-        if(!spj) diff="diff -w ans"+to_string(id)+".txt my"+to_string(id)+".txt";
-        else diff="./spj <my"+to_string(id)+".txt";
+        system(("./make_data >"+data).c_str());
+        system(("./ans < "+data+" > "+ans).c_str());
+        system(("./my < "+data+" > "+my).c_str());
         if(system(diff.c_str()))
         {
             killedMtx.lock();
