@@ -142,7 +142,16 @@ inline void clean()
     vector <string> q;
     getArg("Confirm to clean? (y or n) : ",q);
     if(q[0]=="n") return ;
-    system("ls | grep -Ev 'duipai|ans.cpp|my.cpp|make_data.cpp|README.md|install.sh|src|library|spj.cpp' | xargs rm -r");
+    system("ls | grep -Ev 'duipai|ans.cpp|my.cpp|make_data.cpp|README|install.sh|src|library|spj.cpp' | xargs rm -r");
+}
+//rm
+inline void rm(const vector <string> &arg)
+{
+    vector <string> q;
+    getArg("Confirm to remove? (y or n) : ",q);
+    string c="";
+    for(string i:arg) c+=i,c+=" ";
+    system(c.c_str());
 }
 //initialize
 inline void Init(vector <string> &arg)
@@ -187,7 +196,9 @@ int main()
         else if(ask=="clear") system("clear");
         else if(ask=="cat") cat(cmd);
         else if(ask=="clean") clean();
+        else if(ask=="rm") rm(cmd);
         else if(ask=="init") Init(cmd);
+        else if(ask=="retest" || ask=="rt") retest(cmd);
         else help();
     }
     return 0;

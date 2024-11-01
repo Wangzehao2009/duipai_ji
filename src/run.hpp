@@ -11,7 +11,7 @@ using namespace std;
 bool acc[1000005];
 int threadCnt,killed,testCaseId[1000005];
 bool spj=0,limitt=0,limitc=0;
-int Caselimit=500;
+int Caselimit=500,history_data_cnt=countFilesInDirectory("historydata");
 double Timelimit=45;
 double timeUsed[1000005];
 mutex killedMtx;
@@ -37,7 +37,7 @@ void printStat()
 }
 inline void threadFunction(int &cnt,int id,bool &accepted,double &tm)
 {
-    string data="data"+to_string(id)+".txt",my="my"+to_string(id)+".txt",ans="ans"+to_string(id)+".txt",diff;
+    string data="rundata/data"+to_string(id)+".txt",my="rundata/my"+to_string(id)+".txt",ans="rundata/ans"+to_string(id)+".txt",diff;
     if(!spj) diff="diff -w "+ans+" "+my;
     else diff="./spj "+data+" "+my+" "+ans;
     unsigned long long noww,now;
@@ -70,6 +70,7 @@ inline void threadFunction(int &cnt,int id,bool &accepted,double &tm)
 inline void comp(const string &file,const vector<string> &arg);
 inline void test(vector<string> &arg)
 {
+    system("mkdir rundata");
     threadCnt=1,spj=0,limitt=limitc=0,Caselimit=500,Timelimit=45;
     for(int i=1;i<arg.size();i++)
     {
@@ -98,18 +99,42 @@ inline void test(vector<string> &arg)
     system("clear");
     if(killed)
     {
-        printf("thread #%d : \033[1;31mWrong answer\033[0m on test \033[34m%d\033[0m.\n\n",killed,testCaseId[killed]);
-        system(("cp ans"+to_string(killed)+".txt ans.txt").c_str());
-        system(("cp data"+to_string(killed)+".txt data.txt").c_str());
-        system(("cp my"+to_string(killed)+".txt my.txt").c_str());
+        printf("thread #%d : \033[1;31mWrong answer\033[0m on case \033[34m%d\033[0m.\n\n",killed,testCaseId[killed]);
+        system(("cp rundata/ans"+to_string(killed)+".txt ans.txt").c_str());
+        system(("cp rundata/data"+to_string(killed)+".txt data.txt").c_str());
+        system(("cp rundata/my"+to_string(killed)+".txt my.txt").c_str());
+        history_data_cnt++;
+        if(access("historydata",0)==-1) system("mkdir historydata");
+        system(("cp rundata/data"+to_string(killed)+".txt historydata/data"+to_string(history_data_cnt)+".txt").c_str());
         compout();
     }
     else printf("\033[32mAccept\033[0m.\n\n");
-    for(int i=1;i<=threadCnt;i++)
+    system("rm -r rundata");
+}
+//retest
+inline void retest(vector <string> &arg)
+{
+    system("cp -r historydata rundata");
+    for(int i=1;i<arg.size();i++) if(arg[i]=="-s" || arg[i]=="--spj") spj=1;
+    for(int id=1;id<=history_data_cnt;++id)
     {
-        system(("rm ans"+to_string(i)+".txt").c_str());
-        system(("rm data"+to_string(i)+".txt").c_str());
-        system(("rm my"+to_string(i)+".txt").c_str());
+        string data="rundata/data"+to_string(id)+".txt",my="rundata/my"+to_string(id)+".txt",ans="rundata/ans"+to_string(id)+".txt",diff;
+        if(!spj) diff="diff -w "+ans+" "+my;
+        else diff="./spj "+data+" "+my+" "+ans;
+        system(("./ans < "+data+" > "+ans).c_str());
+        system(("./my < "+data+" > "+my).c_str());
+        if(system(diff.c_str()))
+        {
+            printf("\033[1;31mWrong answer\033[0m on case \033[34m%d\033[0m.\n\n",id);
+            system(("cp rundata/ans"+to_string(id)+".txt ans.txt").c_str());
+            system(("cp rundata/data"+to_string(id)+".txt data.txt").c_str());
+            system(("cp rundata/my"+to_string(id)+".txt my.txt").c_str());
+            compout();
+            system("rm -r rundata");
+            return ;
+        }
     }
+    printf("\033[32mAccept\033[0m.\n\n");
+    system("rm -r rundata");
 }
 #endif
