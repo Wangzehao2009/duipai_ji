@@ -3,6 +3,8 @@
 #include <bits/stdc++.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <dirent.h>  // 用于目录操作
+#include <sys/stat.h> // 用于判断文件类型
 using namespace std;
 //check find
 inline bool fd(const string &x,const string &y)
@@ -69,5 +71,38 @@ inline void compout()
     getline(cin,s);
     split(s,ask);
     if(ask[0]=="y") system("vimdiff ans.txt my.txt");
+}
+// count document number
+inline int countFilesInDirectory(const string& directoryPath)
+{
+    int fileCount = 0;
+    DIR* dir = opendir(directoryPath.c_str()); // 打开目录
+    if (dir == nullptr)
+    {
+        // std::cerr << "无法打开目录: " << directoryPath << std::endl;
+        return 0;
+    }
+    struct dirent* entry;
+    while ((entry = readdir(dir)) != nullptr)
+    { // 读取目录中的条目
+        // 跳过当前目录"."和父目录".."
+        if (std::string(entry->d_name) == "." || std::string(entry->d_name) == "..") continue;
+        // 构造完整路径
+        std::string filePath = directoryPath + "/" + entry->d_name;
+        // 使用 stat 函数获取文件状态信息
+        struct stat fileStat;
+        if (stat(filePath.c_str(), &fileStat) == -1)
+        {
+            std::cerr << "无法读取文件信息: " << filePath << std::endl;
+            continue;
+        }
+        // 如果是常规文件，增加计数
+        if (S_ISREG(fileStat.st_mode))
+        {
+            ++fileCount;
+        }
+    }
+    closedir(dir); // 关闭目录
+    return fileCount;
 }
 #endif

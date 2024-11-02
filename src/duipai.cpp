@@ -25,7 +25,7 @@ inline void comp(const string &file,const vector<string> &arg)
     if(file=="NULL") return ;
     string cmd="g++ "+file+".cpp -o "+file;
     for(int i=1;i<arg.size();i++) cmd+=" "+arg[i];
-    system(cmd.c_str());
+    system(cmd.c_str()),system(("mv "+file+" exe").c_str());
 }
 #define compall(arg) (comp("ans",arg),comp("my",arg),comp("make_data",arg),comp("spj",arg))
 inline void qcomp(vector<string> &arg)
@@ -116,8 +116,8 @@ inline void cat(vector<string> &files){
 // test
 inline void querytest(vector<string> &arg)
 {
-    system("./ans < data.txt > ans.txt");
-    system("./my < data.txt > my.txt");
+    system("exe/./ans < data.txt > ans.txt");
+    system("exe/./my < data.txt > my.txt");
     for(int i=1;i<arg.size();++i)
     {
         if(arg[i]=="-d" || arg[i]=="--diff") diff();
@@ -133,7 +133,7 @@ inline void querytest(vector<string> &arg)
             if(files.empty()) files.push_back("all");
             cat(files);
         }
-        if(arg[i]=="-s" || arg[i]=="--spj") system("./spj data.txt my.txt ans.txt");
+        if(arg[i]=="-s" || arg[i]=="--spj") system("exe/./spj data.txt my.txt ans.txt");
     }
 }
 //clean
@@ -142,7 +142,16 @@ inline void clean()
     vector <string> q;
     getArg("Confirm to clean? (y or n) : ",q);
     if(q[0]=="n") return ;
-    system("ls | grep -Ev 'duipai|ans.cpp|my.cpp|make_data.cpp|README.md|install.sh|src|library|spj.cpp' | xargs rm -r");
+    system("ls | grep -Ev 'duipai|ans.cpp|my.cpp|make_data.cpp|README.md|install.sh|src|library|spj.cpp|exe' | xargs rm -r");
+}
+//rm
+inline void rm(const vector <string> &arg)
+{
+    vector <string> q;
+    getArg("Confirm to remove? (y or n) : ",q);
+    string c="";
+    for(string i:arg) c+=i,c+=" ";
+    system(c.c_str());
 }
 //initialize
 inline void Init(vector <string> &arg)
@@ -187,7 +196,9 @@ int main()
         else if(ask=="clear") system("clear");
         else if(ask=="cat") cat(cmd);
         else if(ask=="clean") clean();
+        else if(ask=="rm") rm(cmd);
         else if(ask=="init") Init(cmd);
+        else if(ask=="retest" || ask=="rt") retest(cmd);
         else help();
     }
     return 0;

@@ -29,14 +29,13 @@ init [ file ... ] -- initialize files
 comp (c) [ file ... ] -- compile
     [ compile_option ... ] - customize compile
 
-cat [ file ... ] -- concatenate and print files
-
 test (t) [ file ... ] -- test current data
     [ --diff | -d ] - check differences
     [ --cat | -c ] - cat
     [ --spj | -s ] - compare by special judge
 
-clean -- delete all files in the folder except system files
+retest (rt) -- retest all the files in historydata 
+    [ --spj | -s ] - compare by special judge
 
 run (r)  -- start duipaiing
     [ --cores | -c ] [ thread_count ] - run by using [ thread_count ] threads
@@ -44,7 +43,13 @@ run (r)  -- start duipaiing
     [ --Timelimit | -T ] [ time ] - set [ time ] as running time limit
     [ --Caselimit | -C ] [ case ] - set [ case ] as running case limit
 
+cat [ file ... ] -- concatenate and print files
+
 clear -- clear the screen
+
+clean -- delete all files in the folder except system files
+
+rm [ file ... ] -- remove files and directory ( same as bash )
 
 quit (q) -- quit
 ```
@@ -59,8 +64,11 @@ ans.txt (ans) (a)
 my.cpp (my) (m)
 my.txt (my) (m)
 spj.cpp (spj) (s)
-make_data.cpp + ans.cpp + my.cpp +spj.cpp (all)
+make_data.cpp + ans.cpp + my.cpp + spj.cpp (all)
 data.txt + ans.txt + my.txt (all)
 src
+exe
+historydata
+rundata
 library
 ```
