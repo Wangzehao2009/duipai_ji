@@ -86,23 +86,19 @@ inline int countFilesInDirectory(const string& directoryPath)
     while ((entry = readdir(dir)) != nullptr)
     { // 读取目录中的条目
         // 跳过当前目录"."和父目录".."
-        if (std::string(entry->d_name) == "." || std::string(entry->d_name) == "..")
-        {
-            continue;
-        }
-
+        if (std::string(entry->d_name) == "." || std::string(entry->d_name) == "..") continue;
         // 构造完整路径
         std::string filePath = directoryPath + "/" + entry->d_name;
-
         // 使用 stat 函数获取文件状态信息
         struct stat fileStat;
-        if (stat(filePath.c_str(), &fileStat) == -1) {
+        if (stat(filePath.c_str(), &fileStat) == -1)
+        {
             std::cerr << "无法读取文件信息: " << filePath << std::endl;
             continue;
         }
-
         // 如果是常规文件，增加计数
-        if (S_ISREG(fileStat.st_mode)) {
+        if (S_ISREG(fileStat.st_mode))
+        {
             ++fileCount;
         }
     }

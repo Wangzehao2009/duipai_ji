@@ -17,7 +17,8 @@ double timeUsed[1000005];
 mutex killedMtx;
 thread t[1000005];
 unsigned long long t0,t1;
-unsigned long long gettime(){
+unsigned long long gettime()
+{
     struct timeval tv;
     gettimeofday(&tv,NULL);
     unsigned long long noww,now;
@@ -39,7 +40,7 @@ inline void threadFunction(int &cnt,int id,bool &accepted,double &tm)
 {
     string data="rundata/data"+to_string(id)+".txt",my="rundata/my"+to_string(id)+".txt",ans="rundata/ans"+to_string(id)+".txt",diff;
     if(!spj) diff="diff -w "+ans+" "+my;
-    else diff="./spj "+data+" "+my+" "+ans;
+    else diff="exe/./spj "+data+" "+my+" "+ans;
     unsigned long long noww,now;
     noww=now=gettime();
     while(((!(limitc^limitt) && cnt<=Caselimit && (noww-now)*1.0/1000<=Timelimit) || (limitc && cnt<=Caselimit) || (limitt && (noww-now)*1.0/1000<=Timelimit)) && !killed)
@@ -47,9 +48,9 @@ inline void threadFunction(int &cnt,int id,bool &accepted,double &tm)
         ++cnt;
         noww=gettime();
         tm=(noww-now)*1.0/1000;
-        system(("./make_data >"+data).c_str());
-        system(("./ans < "+data+" > "+ans).c_str());
-        system(("./my < "+data+" > "+my).c_str());
+        system(("exe/./make_data >"+data).c_str());
+        system(("exe/./ans < "+data+" > "+ans).c_str());
+        system(("exe/./my < "+data+" > "+my).c_str());
         if(system(diff.c_str()))
         {
             killedMtx.lock();
@@ -103,38 +104,47 @@ inline void test(vector<string> &arg)
         system(("cp rundata/ans"+to_string(killed)+".txt ans.txt").c_str());
         system(("cp rundata/data"+to_string(killed)+".txt data.txt").c_str());
         system(("cp rundata/my"+to_string(killed)+".txt my.txt").c_str());
+        if(access("historydata",0)==-1) history_data_cnt=0,system("mkdir historydata");
         history_data_cnt++;
-        if(access("historydata",0)==-1) system("mkdir historydata");
         system(("cp rundata/data"+to_string(killed)+".txt historydata/data"+to_string(history_data_cnt)+".txt").c_str());
+        system("rm -r rundata");
         compout();
     }
-    else printf("\033[32mAccept\033[0m.\n\n");
-    system("rm -r rundata");
+    else 
+    {
+        system("rm -r rundata");
+        printf("\033[32mAccept\033[0m.\n\n");
+    }
 }
 //retest
 inline void retest(vector <string> &arg)
 {
+    if(access("historydata",0)==-1)
+    {
+        printf("\033[1;31merror: \033[0mNo historydata\n");
+        return ;
+    }
     system("cp -r historydata rundata");
     for(int i=1;i<arg.size();i++) if(arg[i]=="-s" || arg[i]=="--spj") spj=1;
     for(int id=1;id<=history_data_cnt;++id)
     {
         string data="rundata/data"+to_string(id)+".txt",my="rundata/my"+to_string(id)+".txt",ans="rundata/ans"+to_string(id)+".txt",diff;
         if(!spj) diff="diff -w "+ans+" "+my;
-        else diff="./spj "+data+" "+my+" "+ans;
-        system(("./ans < "+data+" > "+ans).c_str());
-        system(("./my < "+data+" > "+my).c_str());
+        else diff="exe/./spj "+data+" "+my+" "+ans;
+        system(("exe/./ans < "+data+" > "+ans).c_str());
+        system(("exe/./my < "+data+" > "+my).c_str());
         if(system(diff.c_str()))
         {
             printf("\033[1;31mWrong answer\033[0m on case \033[34m%d\033[0m.\n\n",id);
             system(("cp rundata/ans"+to_string(id)+".txt ans.txt").c_str());
             system(("cp rundata/data"+to_string(id)+".txt data.txt").c_str());
             system(("cp rundata/my"+to_string(id)+".txt my.txt").c_str());
-            compout();
             system("rm -r rundata");
+            compout();
             return ;
         }
     }
-    printf("\033[32mAccept\033[0m.\n\n");
     system("rm -r rundata");
+    printf("\033[32mAccept\033[0m.\n\n");
 }
 #endif
