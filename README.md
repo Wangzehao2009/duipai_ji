@@ -17,7 +17,7 @@ g++ src/duipai.cpp -I ./library/libs/include -L ./library/libs/lib -L ./library/
 ``
 
 
-将标准程序写入 `ans.cpp` ，需要对拍的程序写入 `my.cpp` ，在 `make_data.cpp` 中写入数据生成代码。
+将标准程序写入 `ans.cpp` ，需要对拍的程序写入 `my.cpp` ，在 `make_data.cpp` 中写入数据生成代码。如果程序需要使用 special judge ，在 ``spj.cpp`` 中写入 special judge 代码。
 
 
 ## 操作指南
