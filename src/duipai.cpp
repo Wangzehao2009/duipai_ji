@@ -22,6 +22,7 @@ inline void diff()
 vector<string> default_comp_arg={"","-w","-std=c++14","-O2","-O3","-Ofast"};
 inline void comp(const string &file,const vector<string> &arg)
 {
+    if(access("exe",0)==-1) system("mkdir exe");
     if(file=="NULL") return ;
     string cmd="g++ "+file+".cpp -o "+file;
     for(int i=1;i<arg.size();i++) cmd+=" "+arg[i];
