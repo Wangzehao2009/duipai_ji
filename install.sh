@@ -1,3 +1,9 @@
 #!/bin/bash
-g++ src/duipai.cpp -O2 -O3 -Ofast -o duipai -std=c++17 -Wall -lreadline -ltermcap -w -pthread
-echo -e "\033[32;1mOK\033[0m"
+rm duipai install.log 2>&-
+bash src/install.sh >>install.log 2>&1
+if [ -e duipai ]; then
+    echo -e "\033[32;1mOK\033[0m"
+    rm install.log
+else
+    echo -e "\033[31;1mFAIL\033[0m"
+fi
