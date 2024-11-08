@@ -8,4 +8,4 @@ cd readline
 make
 make install prefix=`pwd`/../libs
 cd ../..
-g++ src/duipai.cpp -I ./library/libs/include -L ./library/libs/lib -L ./library/ncurses/usr/lib/x86_64-linux-gnu -lreadline -std=c++17 -lncurses -pthread -o duipai
+g++ src/duipai.cpp -I ./library/libs/include -I ./library/carefree -L ./library/libs/lib -L ./library/ncurses/usr/lib/x86_64-linux-gnu -lreadline -std=c++17 -lncurses -pthread -o duipai

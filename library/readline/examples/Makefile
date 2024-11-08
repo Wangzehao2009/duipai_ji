@@ -32,7 +32,7 @@ datadir = ${datarootdir}
 
 top_srcdir = ..
 #BUILD_DIR = .
-BUILD_DIR = /home/user/wzh/duipai_ji-ubuntu/library/readline
+BUILD_DIR = /home/user/duipai_ji/library/readline
 installdir = $(datadir)/readline
 
 INSTALL = /usr/bin/install -c
@@ -47,7 +47,7 @@ DESTDIR =
 
 DEFS = -DHAVE_CONFIG_H
 CC = gcc
-CFLAGS = -I /home/user/wzh/duipai_ji-ubuntu/library/readline/../ncurses/usr/include 
+CFLAGS = -I /home/user/duipai_ji/library/readline/../ncurses/usr/include 
 LOCAL_CFLAGS =  -DREADLINE_LIBRARY -DRL_LIBRARY_VERSION='"$(RL_LIBRARY_VERSION)"'
 CPPFLAGS = 
 
@@ -55,7 +55,7 @@ INCLUDES = -I$(srcdir) -I$(top_srcdir) -I..
 
 CCFLAGS  = $(ASAN_CFLAGS) $(DEFS) $(LOCAL_CFLAGS) $(INCLUDES) $(CPPFLAGS) \
 	$(CFLAGS)
-LDFLAGS = -g -L.. -lncurses -L /home/user/wzh/duipai_ji-ubuntu/library/readline/../ncurses/usr/lib/x86_64-linux-gnu $(ASAN_LDFLAGS)
+LDFLAGS = -g -L.. -lncurses -L /home/user/duipai_ji/library/readline/../ncurses/usr/lib/x86_64-linux-gnu $(ASAN_LDFLAGS)
 
 ASAN_XCFLAGS = -fsanitize=address -fno-omit-frame-pointer
 ASAN_XLDFLAGS = -fsanitize=address

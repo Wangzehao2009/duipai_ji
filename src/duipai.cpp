@@ -19,7 +19,7 @@ inline void diff()
     printf("\033[32mAccept\033[0m.\n\n");
 }
 // compile
-vector<string> default_comp_arg={"","-w","-std=c++14","-O2","-O3","-Ofast"};
+vector<string> default_comp_arg={"","-w","-std=c++14","-O2","-O3","-Ofast","-I ./library/carefree","-I ./library"};
 inline void comp(const string &file,const vector<string> &arg)
 {
     if(access("exe",0)==-1) system("mkdir exe");
@@ -143,7 +143,7 @@ inline void clean()
     vector <string> q;
     getArg("Confirm to clean? (y or n) : ",q);
     if(q[0]=="n") return ;
-    system("ls | grep -Ev 'duipai|ans.cpp|my.cpp|make_data.cpp|README.md|install.sh|src|library|spj.cpp|exe' | xargs rm -r");
+    system("ls | grep -Ev '.gitignore|license|duipai|ans.cpp|my.cpp|make_data.cpp|README.md|install.sh|src|library|spj.cpp|exe' | xargs rm -r 2>/dev/null");
 }
 //rm
 inline void rm(const vector <string> &arg)

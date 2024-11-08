@@ -31,7 +31,7 @@ PACKAGE_TARNAME = readline
 srcdir = .
 
 top_srcdir = .
-BUILD_DIR = /home/user/wzh/duipai_ji-ubuntu/library/readline
+BUILD_DIR = /home/user/duipai_ji/library/readline
 
 INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = ${INSTALL}
@@ -74,7 +74,7 @@ DESTDIR =
 ETAGS = etags
 CTAGS = ctags -w
 
-CFLAGS = -I /home/user/wzh/duipai_ji-ubuntu/library/readline/../ncurses/usr/include 
+CFLAGS = -I /home/user/duipai_ji/library/readline/../ncurses/usr/include 
 LOCAL_CFLAGS =  -DRL_LIBRARY_VERSION='"$(RL_LIBRARY_VERSION)"' -DBRACKETED_PASTE_DEFAULT=1
 CPPFLAGS = 
 
@@ -93,7 +93,7 @@ CCFLAGS = $(XCCFLAGS) $(LOCAL_CFLAGS) $(CFLAGS)
 GCC_LINT_FLAGS = -ansi -Wall -Wshadow -Wpointer-arith -Wcast-qual \
 		 -Wwrite-strings -Wstrict-prototypes \
 		 -Wmissing-prototypes -Wno-implicit -pedantic
-GCC_LINT_CFLAGS = $(XCCFLAGS) $(GCC_LINT_FLAGS) -I /home/user/wzh/duipai_ji-ubuntu/library/readline/../ncurses/usr/include  
+GCC_LINT_CFLAGS = $(XCCFLAGS) $(GCC_LINT_FLAGS) -I /home/user/duipai_ji/library/readline/../ncurses/usr/include  
 
 ASAN_XCFLAGS = -fsanitize=address -fno-omit-frame-pointer
 ASAN_XLDFLAGS = -fsanitize=address

@@ -32,7 +32,7 @@ datarootdir = ${prefix}/share
 srcdir = .
 VPATH = ..
 topdir = ..
-BUILD_DIR = /home/user/wzh/duipai_ji-ubuntu/library/readline
+BUILD_DIR = /home/user/duipai_ji/library/readline
 
 INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = ${INSTALL}
@@ -63,10 +63,10 @@ localedir = ${datarootdir}/locale
 # Support an alternate destination root directory for package building
 DESTDIR =
 
-CFLAGS = -I /home/user/wzh/duipai_ji-ubuntu/library/readline/../ncurses/usr/include 
+CFLAGS = -I /home/user/duipai_ji/library/readline/../ncurses/usr/include 
 LOCAL_CFLAGS =  -DRL_LIBRARY_VERSION='"$(RL_LIBRARY_VERSION)"' -DBRACKETED_PASTE_DEFAULT=1
 CPPFLAGS = 
-LDFLAGS = -lncurses -L /home/user/wzh/duipai_ji-ubuntu/library/readline/../ncurses/usr/lib/x86_64-linux-gnu  -I /home/user/wzh/duipai_ji-ubuntu/library/readline/../ncurses/usr/include 
+LDFLAGS = -lncurses -L /home/user/duipai_ji/library/readline/../ncurses/usr/lib/x86_64-linux-gnu  -I /home/user/duipai_ji/library/readline/../ncurses/usr/include 
 
 DEFS = -DHAVE_CONFIG_H 
 LOCAL_DEFS = 
@@ -85,7 +85,7 @@ SHOBJ_LDFLAGS = -shared -Wl,-soname,$@
 SHOBJ_XLDFLAGS = 
 SHOBJ_LIBS = 
 
-SHLIB_XLDFLAGS = -lncurses -L /home/user/wzh/duipai_ji-ubuntu/library/readline/../ncurses/usr/lib/x86_64-linux-gnu -Wl,-rpath,$(libdir) -Wl,-soname,`basename $@ $(SHLIB_MINOR)`
+SHLIB_XLDFLAGS = -lncurses -L /home/user/duipai_ji/library/readline/../ncurses/usr/lib/x86_64-linux-gnu -Wl,-rpath,$(libdir) -Wl,-soname,`basename $@ $(SHLIB_MINOR)`
 SHLIB_LIBS =  
 
 SHLIB_DOT = .
