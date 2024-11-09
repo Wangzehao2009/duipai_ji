@@ -25,7 +25,7 @@ inline void comp(const string &file,const vector<string> &arg)
     if(access("exe",0)==-1) system("mkdir exe");
     if(file=="NULL") return ;
     string cmd="g++ "+file+".cpp -o "+file;
-    for(int i=1;i<arg.size();i++) cmd+=" "+arg[i];
+    for(int i=0;i<arg.size();i++) cmd+=" "+arg[i];
     system(cmd.c_str()),system(("mv "+file+" exe").c_str());
 }
 #define compall(arg) (comp("ans",arg),comp("my",arg),comp("make_data",arg),comp("spj",arg))
