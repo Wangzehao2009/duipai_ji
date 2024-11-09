@@ -11,6 +11,8 @@ test (t) [ file ... ] -- test current data
     [ --diff | -d ] - check differences
     [ --cat | -c ] - cat
     [ --spj | -s ] - compare by special judge
+    [ --timelimit | -t ] [ time ] - set [ time ] (integer) as time (in second) limit for each testcase
+    [ --memlimit | -m ] [ mem ] - set [ mem ] (integer) as memory (in MB) limit for each testcase
 
 clean -- delete all files in the folder except system files
 
@@ -19,6 +21,8 @@ run (r)  -- start duipaiing
     [ --spj | -s ] - compare by special judge
     [ --Timelimit | -T ] [ time ] - set [ time ] as running time limit
     [ --Caselimit | -C ] [ case ] - set [ case ] as running case limit
+    [ --timelimit | -t ] [ time ] - set [ time ] (integer) as time (in second) limit for each testcase
+    [ --memlimit | -m ] [ mem ] - set [ mem ] (integer) as memory (in MB) limit for each testcase
 
 clear -- clear the screen
 
