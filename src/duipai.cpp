@@ -143,7 +143,7 @@ inline void clean()
     vector <string> q;
     getArg("Confirm to clean? (y or n) : ",q);
     if(q[0]=="n") return ;
-    system("ls | grep -Ev 'duipai|ans.cpp|my.cpp|make_data.cpp|README.md|install.sh|src|library|spj.cpp|exe' | xargs rm -r");
+    system("ls | grep -Ev 'duipai|ans.cpp|my.cpp|make_data.cpp|README.md|install.sh|src|library|spj.cpp|exe|.gitignore' | xargs rm -r");
 }
 //rm
 inline void rm(const vector <string> &arg)
