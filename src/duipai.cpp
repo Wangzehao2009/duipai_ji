@@ -1,3 +1,11 @@
+/*
+ * @copyright Copyright (C) 2024 WangZehao, JiZiqian.
+ * @file duipai.cpp
+ * @authors WangZehao, JiZiqian
+ */
+
+// Visit <https://github.com/Wangzehao2009/duipai_ji> for more information.
+
 #include <bits/stdc++.h>
 #include <sys/time.h>
 #include <readline/readline.h>
@@ -61,35 +69,7 @@ inline void queryq()
 // help
 inline void help()
 {
-    printf("help (h) -- help\n");
-    printf("\n");
-    printf("init [ file ... ] -- initialize files\n");
-    printf("\n");
-    printf("comp (c) [ file ... ] -- compile\n");
-    printf("    [ compile_option ... ] - customize compile\n");
-    printf("\n");
-    printf("cat [ file ... ] -- concatenate and print files\n");
-    printf("\n");
-    printf("test (t) [ file ... ] -- test current data\n");
-    printf("    [ --diff | -d ] - check differences\n");
-    printf("    [ --cat | -c ] - cat\n");
-    printf("    [ --spj | -s ] - compare by special judge\n");
-    printf("    [ --timelimit | -t ] [ time ] - set [ time ] (integer) as time (in second) limit for each testcase\n");
-    printf("    [ --memlimit | -m ] [ mem ] - set [ mem ] (integer) as memory (in MB) limit for each testcase\n");
-    printf("\n");
-    printf("clean -- delete all files in the folder except system files\n");
-    printf("\n");
-    printf("run (r)  -- start duipaiing\n");
-    printf("    [ --cores | -c ] [ thread_count ] - run by using [ thread_count ] threads\n");
-    printf("    [ --spj | -s ] - compare by special judge\n");
-    printf("    [ --Timelimit | -T ] [ time ] - set [ time ] as running time limit\n");
-    printf("    [ --Caselimit | -C ] [ case ] - set [ case ] as running case limit\n");
-    printf("    [ --timelimit | -t ] [ time ] - set [ time ] (integer) as time (in second) limit for each testcase\n");
-    printf("    [ --memlimit | -m ] [ mem ] - set [ mem ] (integer) as memory (in MB) limit for each testcase\n");
-    printf("\n");
-    printf("clear -- clear the screen\n");
-    printf("\n");
-    printf("quit (q) -- quit\n");
+    system("cat src/help.txt");
 }
 // cat
 inline void catfile(string file)

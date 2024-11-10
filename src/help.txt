@@ -1,20 +1,22 @@
-help (h) -- help
+cat [ file ... ] -- concatenate and print files
 
-init [ file ... ] -- initialize files
+clean -- delete all files in the folder except system files
+
+clear -- clear the screen
 
 comp (c) [ file ... ] -- compile
     [ compile_option ... ] - customize compile
 
-cat [ file ... ] -- concatenate and print files
+help (h) -- help
 
-test (t) [ file ... ] -- test current data
-    [ --diff | -d ] - check differences
-    [ --cat | -c ] - cat
+init [ file ... ] -- initialize files
+
+quit (q) -- quit
+
+retest (rt) -- retest error data
     [ --spj | -s ] - compare by special judge
     [ --timelimit | -t ] [ time ] - set [ time ] (integer) as time (in second) limit for each testcase
     [ --memlimit | -m ] [ mem ] - set [ mem ] (integer) as memory (in MB) limit for each testcase
-
-clean -- delete all files in the folder except system files
 
 run (r)  -- start duipaiing
     [ --cores | -c ] [ thread_count ] - run by using [ thread_count ] threads
@@ -24,6 +26,9 @@ run (r)  -- start duipaiing
     [ --timelimit | -t ] [ time ] - set [ time ] (integer) as time (in second) limit for each testcase
     [ --memlimit | -m ] [ mem ] - set [ mem ] (integer) as memory (in MB) limit for each testcase
 
-clear -- clear the screen
-
-quit (q) -- quit
+test (t) [ file ... ] -- test current data
+    [ --diff | -d ] - check differences
+    [ --cat | -c ] - cat
+    [ --spj | -s ] - compare by special judge
+    [ --timelimit | -t ] [ time ] - set [ time ] (integer) as time (in second) limit for each testcase
+    [ --memlimit | -m ] [ mem ] - set [ mem ] (integer) as memory (in MB) limit for each testcase

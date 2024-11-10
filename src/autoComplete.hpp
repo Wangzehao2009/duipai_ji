@@ -1,3 +1,11 @@
+/*
+ * @copyright Copyright (C) 2024 WangZehao, JiZiqian.
+ * @file autoComplete.hpp
+ * @authors WangZehao, JiZiqian
+ */
+
+// Visit <https://github.com/Wangzehao2009/duipai_ji> for more information.
+
 #ifndef __AUTOCOMPLETE_HPP__
 #define __AUTOCOMPLETE_HPP__
 // init
