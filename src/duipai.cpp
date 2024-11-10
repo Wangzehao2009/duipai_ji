@@ -7,19 +7,8 @@
 #include "autoComplete.hpp"
 using namespace std;
 string author="wzh jzq";
-//diff
-inline void diff()
-{
-    if(system("diff -w ans.txt my.txt"))
-    {
-        printf("\033[1;31mWrong answer\033[0m.\n\n");
-        compout();
-        return ;
-    }
-    printf("\033[32mAccept\033[0m.\n\n");
-}
 // compile
-vector<string> default_comp_arg={"","-w","-std=c++14","-O2","-O3","-Ofast","-I ./library/carefree","-I ./library"};
+vector<string> default_comp_arg={"","-w","-std=c++14","-O2","-O3","-Ofast","-I ./include/carefree","-I ./include"};
 inline void comp(const string &file,const vector<string> &arg)
 {
     if(access("exe",0)==-1) system("mkdir exe");
@@ -85,6 +74,8 @@ inline void help()
     printf("    [ --diff | -d ] - check differences\n");
     printf("    [ --cat | -c ] - cat\n");
     printf("    [ --spj | -s ] - compare by special judge\n");
+    printf("    [ --timelimit | -t ] [ time ] - set [ time ] (integer) as time (in second) limit for each testcase\n");
+    printf("    [ --memlimit | -m ] [ mem ] - set [ mem ] (integer) as memory (in MB) limit for each testcase\n");
     printf("\n");
     printf("clean -- delete all files in the folder except system files\n");
     printf("\n");
@@ -93,6 +84,8 @@ inline void help()
     printf("    [ --spj | -s ] - compare by special judge\n");
     printf("    [ --Timelimit | -T ] [ time ] - set [ time ] as running time limit\n");
     printf("    [ --Caselimit | -C ] [ case ] - set [ case ] as running case limit\n");
+    printf("    [ --timelimit | -t ] [ time ] - set [ time ] (integer) as time (in second) limit for each testcase\n");
+    printf("    [ --memlimit | -m ] [ mem ] - set [ mem ] (integer) as memory (in MB) limit for each testcase\n");
     printf("\n");
     printf("clear -- clear the screen\n");
     printf("\n");
@@ -112,29 +105,6 @@ inline void cat(vector<string> &files){
         vector <string> file;
         aka(file,files[i],".txt");
         for(string &cat_file:file) if(cat_file!="NULL") catfile(cat_file);
-    }
-}
-// test
-inline void querytest(vector<string> &arg)
-{
-    system("exe/./ans < data.txt > ans.txt");
-    system("exe/./my < data.txt > my.txt");
-    for(int i=1;i<arg.size();++i)
-    {
-        if(arg[i]=="-d" || arg[i]=="--diff") diff();
-        if(arg[i]=="-c" || arg[i]=="--cat")
-        {
-            vector <string> files;
-            files.push_back("");
-            while(i+1<arg.size()) 
-            {
-                if(arg[i+1][0]!='-') files.push_back(arg[++i]);
-                else break;
-            }
-            if(files.empty()) files.push_back("all");
-            cat(files);
-        }
-        if(arg[i]=="-s" || arg[i]=="--spj") system("exe/./spj data.txt my.txt ans.txt");
     }
 }
 //clean
