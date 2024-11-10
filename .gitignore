@@ -1,5 +1,5 @@
-.vscode 
-exe
+.vscode/ 
+exe/
 ans.cpp
 my.cpp
 spj.cpp
