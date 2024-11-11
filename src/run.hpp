@@ -96,7 +96,7 @@ inline void threadFunction(int &cnt,int id,bool &accepted,double &tm)
         ret=execute("exe/ans < "+data+" > "+ans);
         if(ret==SIGXCPU) type=AnsTLE;
         else if(ret!=0) type=AnsMLE;
-        ret=execute("exe/my < "+my+" > "+my);
+        ret=execute("exe/my < "+data+" > "+my);
         if(ret==SIGXCPU) type=MyTLE;
         else if(ret!=0) type=MyMLE;
         if(type==Accept&&diff(data,ans,my)) type=WrongAnswer;
