@@ -8,6 +8,7 @@
 #include "base.hpp"
 #include <unistd.h>
 #include <sys/resource.h>
+#include <sys/wait.h>
 // using namespace std;
 
 bool acc[1000005];
@@ -22,25 +23,28 @@ int timelimit,memlimit;
 
 #define Accept 0
 #define WrongAnswer 1
-#define MakeDataTLE 2
-#define MakeDataMLE 3
-#define AnsTLE 4
-#define AnsMLE 5
-#define MyTLE 6
-#define MyMLE 7
+#define MakeDataLE 2
+#define AnsLE 3
+#define MyLE 4
 
-//diff
-int execute(const std::string cmd){
-    rlimit oTime,oMem;
-    getrlimit(RLIMIT_CPU,&oTime);getrlimit(RLIMIT_AS,&oMem);
-    rlimit nTime,nMem;
-    nTime.rlim_cur=nTime.rlim_max=timelimit;
-    nMem.rlim_cur=nMem.rlim_max=memlimit;
-    setrlimit(RLIMIT_CPU,&nTime);setrlimit(RLIMIT_AS,&nMem);
-    int ret=system(("exec 2>/dev/null "+cmd).c_str());
-    setrlimit(RLIMIT_CPU,&oTime);setrlimit(RLIMIT_AS,&oMem);
-    if(WIFEXITED(ret)&&ret) ret=WEXITSTATUS(ret)-128;
-    return ret;
+int execute(const char* s,const string &in,const string &out){
+    if(in!="") freopen(in.c_str(),"r",stdin);
+    if(out!="") freopen(out.c_str(),"w",stdout);
+    int pid=fork();
+    if(pid==0){
+        rlimit nTime,nMem;
+        nTime.rlim_cur=nTime.rlim_max=timelimit;
+        nMem.rlim_cur=nMem.rlim_max=memlimit*1048576;
+        setrlimit(RLIMIT_CPU,&nTime);setrlimit(RLIMIT_AS,&nMem);
+        exit(execl(s,s,(char*)NULL));
+    }
+    else{
+        int wstatus = 0;
+        waitpid(pid,&wstatus,0);
+        freopen("/dev/tty","r",stdin);freopen("/dev/tty","w",stdout);
+        return wstatus;
+    }
+    return 0;
 }
 inline int diff(const std::string &data,const std::string &ans,const std::string &my)
 {
@@ -53,12 +57,9 @@ inline int diff(const std::string &data,const std::string &ans,const std::string
 inline void printType(int type){
     if(type==Accept) printf("\033[32mAccept\033[0m");
     else if(type==WrongAnswer) printf("\033[1;31mWrong Answer\033[0m");
-    else if(type==MakeDataMLE) printf("\033[35mmake_data MLE\033[0m");
-    else if(type==MakeDataTLE) printf("\033[34mmake_data TLE\033[0m");
-    else if(type==AnsMLE) printf("\033[35mans MLE\033[0m");
-    else if(type==AnsTLE) printf("\033[34mans TLE\033[0m");
-    else if(type==MyMLE) printf("\033[35mMemory Limit Exceeded\033[0m");
-    else if(type==MyTLE) printf("\033[34mTime Limit Exceeded\033[0m");
+    else if(type==MakeDataLE) printf("\033[35mmake_data Limit Exceeded\033[0m");
+    else if(type==AnsLE) printf("\033[35mans Limit Exceeded\033[0m");
+    else if(type==MyLE) printf("\033[35mLimit Exceeded\033[0m");
 }
 unsigned long long gettime()
 {
@@ -81,7 +82,7 @@ void printStat()
 }
 inline void threadFunction(int &cnt,int id,bool &accepted,double &tm)
 {
-    std::string data="rundata/data"+to_string(id)+".txt",my="rundata/my"+to_string(id)+".txt",ans="rundata/ans"+to_string(id)+".txt";
+    string data="rundata/data"+to_string(id)+".txt",my="rundata/my"+to_string(id)+".txt",ans="rundata/ans"+to_string(id)+".txt";
     unsigned long long noww,now;
     noww=now=gettime();
     while(((!(limitc^limitt) && cnt<=Caselimit && (noww-now)*1.0/1000<=Timelimit) || (limitc && cnt<=Caselimit) || (limitt && (noww-now)*1.0/1000<=Timelimit)) && !killed)
@@ -90,15 +91,12 @@ inline void threadFunction(int &cnt,int id,bool &accepted,double &tm)
         noww=gettime();
         tm=(noww-now)*1.0/1000;
         int type=Accept,ret;
-        ret=execute("exe/make_data >"+data);
-        if(ret==SIGXCPU) type=MakeDataTLE;
-        else if(ret!=0) type=MakeDataMLE;
-        ret=execute("exe/ans < "+data+" > "+ans);
-        if(ret==SIGXCPU) type=AnsTLE;
-        else if(ret!=0) type=AnsMLE;
-        ret=execute("exe/my < "+my+" > "+my);
-        if(ret==SIGXCPU) type=MyTLE;
-        else if(ret!=0) type=MyMLE;
+        ret=execute("exe/make_data","",data);
+        if(ret!=0) type=MakeDataLE;
+        ret=execute("exe/ans",data,ans);
+        if(ret!=0) type=AnsLE;
+        ret=execute("exe/my",data,my);
+        if(ret!=0) type=MyLE;
         if(type==Accept&&diff(data,ans,my)) type=WrongAnswer;
         if(type!=Accept){
             killedMtx.lock();
@@ -188,12 +186,10 @@ inline void retest(std::vector <std::string> &arg)
     {
         std::string data="rundata/data"+to_string(id)+".txt",my="rundata/my"+to_string(id)+".txt",ans="rundata/ans"+to_string(id)+".txt";
         int type=Accept,ret;
-        ret=execute("exe/ans < "+data+" > "+ans);
-        if(ret==SIGXCPU) type=AnsTLE;
-        else if(ret!=0) type=AnsMLE;
-        ret=execute("exe/my < "+data+" > "+my);
-        if(ret==SIGXCPU) type=MyTLE;
-        else if(ret!=0) type=MyMLE;
+        ret=execute("exe/ans",data,ans);
+        if(ret!=0) type=AnsLE;
+        ret=execute("exe/my",data,my);
+        if(ret!=0) type=MyLE;
         if(diff(data,ans,my)) type=WrongAnswer;
         if(type!=Accept){
             printType(type);
@@ -220,12 +216,10 @@ inline void querytest(std::vector<std::string> &arg)
         if(arg[i]=="-m" || arg[i]=="--memlimit") memlimit=stoi(arg[i+1]);
     }
     int type=Accept,ret;
-    ret=execute("exe/ans < data.txt > ans.txt");
-    if(ret==SIGXCPU) type=AnsTLE;
-    else if(ret!=0) type=AnsMLE;
-    ret=execute("exe/my < data.txt > my.txt");
-    if(ret==SIGXCPU) type=MyTLE;
-    else if(ret!=0) type=MyMLE;
+    ret=execute("exe/ans","data.txt","ans.txt");
+    if(ret!=0) type=AnsLE;
+    ret=execute("exe/my","data.txt","my.txt");
+    if(ret!=0) type=MyLE;
     if(type!=Accept){
         printType(type);
         printf(".\n\n");
