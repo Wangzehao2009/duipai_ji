@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: git clone https://github.com/Wangzehao2009/duipai_ji
+      - run: cd duipai_ji
       - run: git checkout -b source
       - run: git checkout -b ubuntu
       - run: git merge source
