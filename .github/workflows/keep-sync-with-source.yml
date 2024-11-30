@@ -11,19 +11,9 @@ jobs:
     steps:
       - name: Merge the branches
         run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token --git-protocol https
-          git clone https://github.com/Wangzehao2009/duipai_ji.git
-          cd duipai_ji
-          git checkout -b source
-          git checkout -b ubuntu
-          git merge source
-          git add .
-          git commit -m "sync"
-          git push
-          git checkout -b Mac
-          git merge source
-          git add .
-          git commit -m "sync"
-          git push
+          gh pr create --base ubuntu --head source
+          gh pr create --base Mac --head source
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: echo "job status is ${{ job.status }}"
       
