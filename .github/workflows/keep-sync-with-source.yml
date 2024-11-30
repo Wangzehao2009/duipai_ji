@@ -11,8 +11,8 @@ jobs:
     steps:
       - name: Merge the branches
         run: |
-          gh pr create --base ubuntu --head source
-          gh pr create --base Mac --head source
+          gh pr create --base ubuntu --head source --title "Auto Merge" --body "By Bot"
+          gh pr create --base Mac --head source --title "Auto Merge" --body "By Bot"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: echo "job status is ${{ job.status }}"
