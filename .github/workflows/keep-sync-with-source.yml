@@ -10,11 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Merge the branches
-        env: 
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git clone https://github.com/Wangzehao2009/duipai_ji.git
           cd duipai_ji
+          echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
           git checkout -b source
           git checkout -b ubuntu
           git merge source
