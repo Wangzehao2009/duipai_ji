@@ -1,0 +1,24 @@
+name: Keep Sync with Source
+run-name: Keeping sync with branch source.
+on:
+  push:
+    branches:
+      - source
+jobs:
+  Merge:
+    runs-on: ubuntu-latest
+    steps:
+      - run: git clone https://github.com/Wangzehao2009/duipai_ji
+      - run: git checkout -b source
+      - run: git checkout -b ubuntu
+      - run: git merge source
+      - run: git add .
+      - run: git commit -m "sync"
+      - run: git push
+      - run: git checkout -b Mac
+      - run: git merge source
+      - run: git add .
+      - run: git commit -m "sync"
+      - run: git push
+      - run: echo "job status is ${{ job.status }}"
+      
