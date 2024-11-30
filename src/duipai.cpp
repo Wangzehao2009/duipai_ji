@@ -1,3 +1,11 @@
+/*
+ * @copyright Copyright (C) 2024 WangZehao, JiZiqian.
+ * @file duipai.cpp
+ * @authors WangZehao, JiZiqian
+ */
+
+// Visit <https://github.com/Wangzehao2009/duipai_ji> for more information.
+
 #include <bits/stdc++.h>
 #include <sys/time.h>
 #include <readline/readline.h>
@@ -61,35 +69,7 @@ inline void queryq()
 // help
 inline void help()
 {
-    printf("help (h) -- help\n");
-    printf("\n");
-    printf("init [ file ... ] -- initialize files\n");
-    printf("\n");
-    printf("comp (c) [ file ... ] -- compile\n");
-    printf("    [ compile_option ... ] - customize compile\n");
-    printf("\n");
-    printf("cat [ file ... ] -- concatenate and print files\n");
-    printf("\n");
-    printf("test (t) [ file ... ] -- test current data\n");
-    printf("    [ --diff | -d ] - check differences\n");
-    printf("    [ --cat | -c ] - cat\n");
-    printf("    [ --spj | -s ] - compare by special judge\n");
-    printf("    [ --timelimit | -t ] [ time ] - set [ time ] (integer) as time (in second) limit for each testcase\n");
-    printf("    [ --memlimit | -m ] [ mem ] - set [ mem ] (integer) as memory (in MB) limit for each testcase\n");
-    printf("\n");
-    printf("clean -- delete all files in the folder except system files\n");
-    printf("\n");
-    printf("run (r)  -- start duipaiing\n");
-    printf("    [ --cores | -c ] [ thread_count ] - run by using [ thread_count ] threads\n");
-    printf("    [ --spj | -s ] - compare by special judge\n");
-    printf("    [ --Timelimit | -T ] [ time ] - set [ time ] as running time limit\n");
-    printf("    [ --Caselimit | -C ] [ case ] - set [ case ] as running case limit\n");
-    printf("    [ --timelimit | -t ] [ time ] - set [ time ] (integer) as time (in second) limit for each testcase\n");
-    printf("    [ --memlimit | -m ] [ mem ] - set [ mem ] (integer) as memory (in MB) limit for each testcase\n");
-    printf("\n");
-    printf("clear -- clear the screen\n");
-    printf("\n");
-    printf("quit (q) -- quit\n");
+    system("cat src/help.txt");
 }
 // cat
 inline void catfile(string file)
@@ -113,7 +93,7 @@ inline void clean()
     vector <string> q;
     getArg("Confirm to clean? (y or n) : ",q);
     if(q[0]=="n") return ;
-    system("ls | grep -Ev '.gitignore|license|duipai|ans.cpp|my.cpp|make_data.cpp|README.md|install.sh|src|library|spj.cpp|exe' | xargs rm -r 2>/dev/null");
+    system("ls | grep -Ev '.gitignore|license|duipai|ans.cpp|my.cpp|make_data.cpp|README.md|install.sh|src|library|spj.cpp|exe|include' | xargs rm -r 2>/dev/null");
 }
 //rm
 inline void rm(const vector <string> &arg)
@@ -145,6 +125,23 @@ inline void Init(vector <string> &arg)
     else printf("is");
     printf(" \033[32minitialized\033[0m.\n");
 }
+// exe
+void exe(vector<string> &cmd){
+    if(cmd.empty()) return;
+    string ask=cmd[0];
+    if(ask=="r" || ask=="run") test(cmd);
+    else if(ask=="c" || ask=="comp") qcomp(cmd);
+    else if(ask=="q" || ask=="quit") queryq();
+    else if(ask=="t" || ask=="test") querytest(cmd);
+    else if(ask=="h" || ask=="help") help();
+    else if(ask=="clear") system("clear");
+    else if(ask=="cat") cat(cmd);
+    else if(ask=="clean") clean();
+    else if(ask=="rm") rm(cmd);
+    else if(ask=="init") Init(cmd);
+    else if(ask=="retest" || ask=="rt") retest(cmd);
+    else help();
+}
 // console
 int main()
 {
@@ -153,24 +150,21 @@ int main()
     compall(default_comp_arg);
     while(true)
     {
-        vector<string> cmd;
+        vector<string> line;
         // printf("\e[32m(ji)$ \e[0m");
         // getArg("\033[D\033[C",cmd);
-        getArg("\001\033[32m\002(ji)$ \001\033[0m\002",cmd);
-        if(cmd.empty()) continue;
-        string ask=cmd[0];
-        if(ask=="r" || ask=="run") test(cmd);
-        else if(ask=="c" || ask=="comp") qcomp(cmd);
-        else if(ask=="q" || ask=="quit") queryq();
-        else if(ask=="t" || ask=="test") querytest(cmd);
-        else if(ask=="h" || ask=="help") help();
-        else if(ask=="clear") system("clear");
-        else if(ask=="cat") cat(cmd);
-        else if(ask=="clean") clean();
-        else if(ask=="rm") rm(cmd);
-        else if(ask=="init") Init(cmd);
-        else if(ask=="retest" || ask=="rt") retest(cmd);
-        else help();
+        getArg("\001\033[32m\002(ji)$ \001\033[0m\002",line);
+        if(line.empty()) continue;
+        line.push_back(";");
+        vector<string> cmd;
+        for(auto s:line){
+            if(s==";"){
+                exe(cmd);
+                cmd.clear();
+            }
+            else cmd.push_back(s);
+        }
     }
     return 0;
 }
+
