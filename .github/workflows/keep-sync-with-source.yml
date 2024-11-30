@@ -8,7 +8,11 @@ on:
 jobs:
   Merge:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./duipai_ji
     steps:
+      - run: ls -a
       - run: git clone https://github.com/Wangzehao2009/duipai_ji
       - run: ls -a
       - run: cd duipai_ji
