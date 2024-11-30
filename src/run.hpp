@@ -1,4 +1,11 @@
-// duipai
+/*
+ * @copyright Copyright (C) 2024 WangZehao, JiZiqian.
+ * @file run.hpp
+ * @authors WangZehao, JiZiqian
+ */
+
+// Visit <https://github.com/Wangzehao2009/duipai_ji> for more information.
+
 #ifndef __RUN_HPP__
 #define __RUN_HPP__
 #include <bits/stdc++.h>
