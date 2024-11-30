@@ -20,12 +20,12 @@ jobs:
           git fetch
           git branch -v
           git checkout ubuntu
-          git merge source
+          git merge origin/source
           git add .
           git commit -m "auto merge"
           git push
           git checkout Mac
-          git merge source
+          git merge origin/source
           git add .
           git commit -m "auto merge"
           git push
