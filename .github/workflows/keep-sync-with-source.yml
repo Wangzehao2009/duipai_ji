@@ -13,18 +13,22 @@ jobs:
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
-      - name: Merge the branches
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
           git fetch
           git branch -v
           git checkout source
+      - name: Merge source to ubuntu
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
           git checkout ubuntu
           git checkout source -- src
           git add .
           git commit -m "auto merge"
           git push
+      - name: Merge source to Mac
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
           git checkout Mac
           git checkout source -- src
           git add .
