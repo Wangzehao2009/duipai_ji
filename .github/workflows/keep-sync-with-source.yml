@@ -9,23 +9,20 @@ jobs:
   Merge:
     runs-on: ubuntu-latest
     steps:
-      - run: ls -a
-      # - run: git clone https://github.com/Wangzehao2009/duipai_ji
-      # - run: ls -a
-      # - run: cd duipai_ji
-      # - run: ls -a
-      # - run: cd duipai_ji
-      # - run: find *
-      - run: git checkout -b source
-      - run: git checkout -b ubuntu
-      - run: git merge source
-      - run: git add .
-      - run: git commit -m "sync"
-      - run: git push
-      - run: git checkout -b Mac
-      - run: git merge source
-      - run: git add .
-      - run: git commit -m "sync"
-      - run: git push
+      - name: Merge the branches
+        run: |
+          git clone https://github.com/Wangzehao2009/duipai_ji
+          cd duipai_ji
+          git checkout -b source
+          git checkout -b ubuntu
+          git merge source
+          git add .
+          git commit -m "sync"
+          git push
+          git checkout -b Mac
+          git merge source
+          git add .
+          git commit -m "sync"
+          git push
       - run: echo "job status is ${{ job.status }}"
       
