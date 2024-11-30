@@ -9,6 +9,8 @@ jobs:
     steps:
       - name: Merge the branches
         run: |
+          git clone https://github.com/Wangzehao2009/duipai_ji.git
+          cd duipai_ji
           gh pr create --base ubuntu --head source --title "Auto Merge" --body "By Bot"
           gh pr create --base Mac --head source --title "Auto Merge" --body "By Bot"
         env:
