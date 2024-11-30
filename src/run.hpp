@@ -28,10 +28,10 @@ int timelimit,memlimit;
 #define MyLE 4
 
 int execute(const char* s,const string &in,const string &out){
-    if(in!="") freopen(in.c_str(),"r",stdin);
-    if(out!="") freopen(out.c_str(),"w",stdout);
     int pid=fork();
     if(pid==0){
+        if(in!="") freopen(in.c_str(),"r",stdin);
+        if(out!="") freopen(out.c_str(),"w",stdout);
         rlimit nTime,nMem;
         nTime.rlim_cur=nTime.rlim_max=timelimit;
         nMem.rlim_cur=nMem.rlim_max=memlimit*1048576;
@@ -41,7 +41,6 @@ int execute(const char* s,const string &in,const string &out){
     else{
         int wstatus = 0;
         waitpid(pid,&wstatus,0);
-        freopen("/dev/tty","r",stdin);freopen("/dev/tty","w",stdout);
         return wstatus;
     }
     return 0;
