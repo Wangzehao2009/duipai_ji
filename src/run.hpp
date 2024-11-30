@@ -257,4 +257,3 @@ inline void querytest(std::vector<std::string> &arg)
     }
 }
 #endif
-
