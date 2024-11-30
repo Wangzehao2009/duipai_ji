@@ -7,13 +7,26 @@ jobs:
   Merge:
     runs-on: ubuntu-latest
     steps:
-      - name: Merge the branches
+      - name: clone the repository
+        run: actions/checkout@v4
+      - name: set up git
         run: |
-          git clone https://github.com/Wangzehao2009/duipai_ji.git
-          cd duipai_ji
-          gh pr create --base ubuntu --head source --title "Auto Merge" --body "By Bot"
-          gh pr create --base Mac --head source --title "Auto Merge" --body "By Bot"
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+      - name: Merge the branches
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git branch -v
+          git checkout ubuntu
+          git merge source
+          git add .
+          git commit -m "auto merge"
+          git push
+          git checkout Mac
+          git merge source
+          git add .
+          git commit -m "auto merge"
+          git push
       - run: echo "job status is ${{ job.status }}"
       
