@@ -11,9 +11,9 @@ jobs:
     steps:
       - name: Merge the branches
         run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token --git-protocol https
           git clone https://github.com/Wangzehao2009/duipai_ji.git
           cd duipai_ji
-          echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
           git checkout -b source
           git checkout -b ubuntu
           git merge source
