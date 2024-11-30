@@ -4,7 +4,7 @@ on:
   push:
   workflow_dispatch:
 jobs:
-  Merge:
+  Update-ubuntu:
     runs-on: ubuntu-latest
     steps:
       - name: clone the repository
@@ -25,6 +25,19 @@ jobs:
           git add .
           git commit -m "auto merge"
           git push
+      - run: echo "job status is ${{ job.status }}"
+  Update-Mac:
+    runs-on: ubuntu-latest
+    steps:
+      - name: clone the repository
+        uses: actions/checkout@v4
+      - name: set up git
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git fetch
+          git branch -v
+          git checkout source
       - name: Merge source to Mac
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
