@@ -19,6 +19,7 @@ jobs:
         run: |
           git fetch
           git branch -v
+          git checkout source
           git checkout ubuntu
           git checkout source -- src
           git add .
