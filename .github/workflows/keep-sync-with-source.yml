@@ -2,6 +2,8 @@ name: Keep Sync with Source
 run-name: Keeping sync with branch source.
 on:
   push:
+    branches:
+      - source
   workflow_dispatch:
 jobs:
   Update-ubuntu:
