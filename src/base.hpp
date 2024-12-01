@@ -1,3 +1,11 @@
+/*
+ * @copyright Copyright (C) 2024 WangZehao, JiZiqian.
+ * @file base.hpp
+ * @authors WangZehao, JiZiqian
+ */
+
+// Visit <https://github.com/Wangzehao2009/duipai_ji> for more information.
+
 #ifndef __BASE_HPP__
 #define __BASE_HPP__
 #include <bits/stdc++.h>
