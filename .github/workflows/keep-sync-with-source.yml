@@ -6,7 +6,9 @@ on:
 jobs:
   Update-ubuntu:
     runs-on: ubuntu-latest
-    permissions: write
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: clone the repository
         uses: actions/checkout@v4
@@ -29,7 +31,9 @@ jobs:
       - run: echo "job status is ${{ job.status }}"
   Update-Mac:
     runs-on: ubuntu-latest
-    permissions: write
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: clone the repository
         uses: actions/checkout@v4
