@@ -18,11 +18,17 @@
 #include <sys/wait.h>
 // using namespace std;
 
+bool interrupt;
+void sigintHandler(int signum);
+void duipaiSigintHandler(int signum){
+    interrupt=true;
+}
+
 bool acc[1000005];
 int threadCnt,killed,killtype,testCaseId[1000005];
 bool spj=0,limitt=0,limitc=0;
 int Caselimit=500,history_data_cnt=countFilesInDirectory("historydata");
-double Timelimit=45,timeUsed[1000005];
+double Timelimit=45;
 mutex killedMtx;
 thread t[1000005];
 unsigned long long t0,t1;
@@ -80,22 +86,26 @@ void printStat()
     int tot=0;
     for(int i=1;i<=threadCnt;i++)
     {
-        if(!acc[i]) printf("\033[1mthread #%d\033[0m\n\033[1;32mRunning\033[0m on case \033[34m%d\033[0m.\n\033[34m%.3lfs\033[0m have been used.\n\n",i,testCaseId[i],timeUsed[i]),tot+=testCaseId[i];
+        if(!acc[i]) printf("\033[1mthread #%d\033[0m\n\033[1;32mRunning\033[0m on case \033[34m%d\033[0m.\n\n",i,testCaseId[i]),tot+=testCaseId[i];
         else printf("\033[1mthread #%d\033[0m\n\033[32mAccept\033[0m.\n\n",i);
     }
     printf("\033[1mtotal time:\033[0m \033[34m%.3lfs\033[0m\n",(gettime()-t0)*1.0/1000);
     printf("\033[1mtotal case:\033[0m \033[34m%d\033[0m\n\n",tot);
 }
-inline void threadFunction(int &cnt,int id,bool &accepted,double &tm)
+inline void threadFunction(int &cnt,int id,bool &accepted)
 {
+    sigset_t ss;
+    sigemptyset(&ss);
+    sigaddset(&ss, SIGINT);
+    pthread_sigmask(SIG_BLOCK,&ss,NULL);
     string data="rundata/data"+to_string(id)+".txt",my="rundata/my"+to_string(id)+".txt",ans="rundata/ans"+to_string(id)+".txt";
     unsigned long long noww,now;
     noww=now=gettime();
-    while(((!(limitc^limitt) && cnt<=Caselimit && (noww-now)*1.0/1000<=Timelimit) || (limitc && cnt<=Caselimit) || (limitt && (noww-now)*1.0/1000<=Timelimit)) && !killed)
+    while(((!(limitc^limitt) && cnt<=Caselimit && (noww-now)*1.0/1000<=Timelimit) || (limitc && cnt<=Caselimit) || (limitt && (noww-now)*1.0/1000<=Timelimit)) && !killed && !interrupt)
     {
         ++cnt;
         noww=gettime();
-        tm=(noww-now)*1.0/1000;
+        double tm=(noww-now)*1.0/1000;
         int type=Accept,ret;
         ret=execute("exe/make_data","",data);
         if(ret!=0) type=MakeDataLE;
@@ -116,7 +126,6 @@ inline void threadFunction(int &cnt,int id,bool &accepted,double &tm)
             killedMtx.unlock();
             return;
         }
-        if((gettime()-t1)*1.0/1000>0.1) t1=gettime(),printStat();
     }
     accepted=1;
     return ;
@@ -135,6 +144,8 @@ inline void test(std::vector<std::string> &arg)
         else if(arg[i]=="-t" || arg[i]=="--timelimit") timelimit=stoi(arg[i+1]);
         else if(arg[i]=="-m" || arg[i]=="--memlimit") memlimit=stoi(arg[i+1]);
     }
+    interrupt=false;
+    signal(SIGINT,duipaiSigintHandler);
     killed=0,killtype=Accept;
     killedMtx.unlock();
     t0=t1=gettime();
@@ -142,18 +153,22 @@ inline void test(std::vector<std::string> &arg)
     {
         testCaseId[i]=1;
         acc[i]=0;
-        timeUsed[i]=0;
-        t[i]=thread(threadFunction,ref(testCaseId[i]),i,ref(acc[i]),ref(timeUsed[i]));
+        t[i]=thread(threadFunction,ref(testCaseId[i]),i,ref(acc[i]));
     }
-    while(!killed)
+    while(!killed&&!interrupt)
     {
         bool flag=true;
         for(int i=1;i<=threadCnt;i++) flag&=acc[i];
         if(flag) break;
+        if((gettime()-t1)*1.0/1000>0.2) t1=gettime(),printStat();
     }
     for(int i=1;i<=threadCnt;i++) t[i].join();
     system("clear");
-    if(killed)
+    if(interrupt){
+        system("rm -r rundata");
+        printf("\033[33mInterrupt\033[0m.\n\n");
+    }
+    else if(killed)
     {
         printf("thread #%d : ",killed);
         printType(killtype);
@@ -172,6 +187,7 @@ inline void test(std::vector<std::string> &arg)
         system("rm -r rundata");
         printf("\033[32mAccept\033[0m.\n\n");
     }
+    signal(SIGINT,sigintHandler);
 }
 //retest
 inline void retest(std::vector <std::string> &arg)
