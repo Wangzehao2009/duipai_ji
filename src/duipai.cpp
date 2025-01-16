@@ -142,10 +142,16 @@ void exe(vector<string> &cmd){
     else if(ask=="retest" || ask=="rt") retest(cmd);
     else help();
 }
+// catch SIGINT
+void sigintHandler(int signum){
+    printf("\n\033[32m(ji)$ \033[0m");
+    return;
+}
 // console
 int main()
 {
     init();
+    signal(SIGINT,sigintHandler);
     printf("Welcome to use \033[1;31mduipai_ji\033[0m by %s.\n\n",author.c_str());
     compall(default_comp_arg);
     while(true)
