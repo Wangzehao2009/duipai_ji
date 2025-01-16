@@ -59,6 +59,10 @@ inline void getLine(const string &prompt,string &s)
 {
     char* buffer=readline(prompt.c_str());
     if(buffer&&*buffer) add_history(buffer);
+    else if(!buffer){
+        printf("\n");
+        exit(0);
+    }
     s=buffer;
     free(buffer);
 }
