@@ -7,12 +7,12 @@ int main(int argc, char* argv[])
 {
     /*
     * argv[1]：输入
-    * argv[2]：标准输出
-    * argv[3]：选手输出
+    * argv[2]：选手输出
+    * argv[3]：标准输出
     * exit code：返回判断结果
     */
     FILE* fdata = fopen(argv[1], "r");
-    FILE* fmy = fopen(argv[3], "r");
-    FILE* fans = fopen(argv[2], "r");
+    FILE* fmy = fopen(argv[2], "r");
+    FILE* fans = fopen(argv[3], "r");
     return 0;
 }
