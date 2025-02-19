@@ -64,7 +64,7 @@ inline void queryq()
 {
     vector<string> ask;
     getArg("Do you want to quit duipai_ji? (y or n) : ",ask);
-    if(ask[0]=="y") exit(0);
+    if(ask.size()&&ask[0]=="y") exit(0);
 }
 // help
 inline void help()
@@ -125,6 +125,17 @@ inline void Init(vector <string> &arg)
     else printf("is");
     printf(" \033[32minitialized\033[0m.\n");
 }
+void makedatatest(const vector<string> &arg){
+    timelimit=1,memlimit=512;
+    for(int i=1;i<arg.size();i++)
+    {
+        if(arg[i]=="-t" || arg[i]=="--timelimit") timelimit=stoi(arg[i+1]);
+        else if(arg[i]=="-m" || arg[i]=="--memlimit") memlimit=stoi(arg[i+1]);
+    }
+    int ret=execute("exe/make_data","","data.txt");
+    if(ret) printType(MakeDataLE),printf("\n");
+    catfile("data.txt");
+}
 // exe
 void exe(vector<string> &cmd){
     if(cmd.empty()) return;
@@ -140,6 +151,7 @@ void exe(vector<string> &cmd){
     else if(ask=="rm") rm(cmd);
     else if(ask=="init") Init(cmd);
     else if(ask=="retest" || ask=="rt") retest(cmd);
+    else if(ask=="mk") makedatatest(cmd);
     else help();
 }
 // catch SIGINT
