@@ -133,7 +133,8 @@ void makedatatest(const vector<string> &arg){
         else if(arg[i]=="-m" || arg[i]=="--memlimit") memlimit=stoi(arg[i+1]);
     }
     int ret=execute("exe/make_data","","data.txt");
-    if(ret) printType(MakeDataLE),printf("\n");
+    if(ret==SIGXCPU) printType(MakeDataTLE),printf("\n");
+    else if(ret!=0) printType(MakeDataMLE),printf("\n");
     catfile("data.txt");
 }
 // exe
